@@ -5,6 +5,15 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StroJLogService", "StroJLogService.vcxproj", "{FC979466-DAEB-46EC-BAA4-A36B987C3F3D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServiceConfig", "StrojLogServiceConfig\StrojLogServiceConfig.vcxproj", "{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ServiceControl", "StrojLogServiceControl\StrojLogServiceControl.vcxproj", "{554FFA86-8431-4437-9EC2-591A6D648444}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Položky řešení", "Položky řešení", "{5537927A-8B6D-42B9-A75F-23F14001BC90}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +30,22 @@ Global
 		{FC979466-DAEB-46EC-BAA4-A36B987C3F3D}.Release|x64.Build.0 = Release|x64
 		{FC979466-DAEB-46EC-BAA4-A36B987C3F3D}.Release|x86.ActiveCfg = Release|Win32
 		{FC979466-DAEB-46EC-BAA4-A36B987C3F3D}.Release|x86.Build.0 = Release|Win32
+		{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}.Debug|x64.ActiveCfg = Debug|x64
+		{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}.Debug|x64.Build.0 = Debug|x64
+		{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}.Debug|x86.ActiveCfg = Debug|Win32
+		{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}.Debug|x86.Build.0 = Debug|Win32
+		{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}.Release|x64.ActiveCfg = Release|x64
+		{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}.Release|x64.Build.0 = Release|x64
+		{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}.Release|x86.ActiveCfg = Release|Win32
+		{1C6A88BD-C9E9-4D6C-942F-3637FE2A96DC}.Release|x86.Build.0 = Release|Win32
+		{554FFA86-8431-4437-9EC2-591A6D648444}.Debug|x64.ActiveCfg = Debug|x64
+		{554FFA86-8431-4437-9EC2-591A6D648444}.Debug|x64.Build.0 = Debug|x64
+		{554FFA86-8431-4437-9EC2-591A6D648444}.Debug|x86.ActiveCfg = Debug|Win32
+		{554FFA86-8431-4437-9EC2-591A6D648444}.Debug|x86.Build.0 = Debug|Win32
+		{554FFA86-8431-4437-9EC2-591A6D648444}.Release|x64.ActiveCfg = Release|x64
+		{554FFA86-8431-4437-9EC2-591A6D648444}.Release|x64.Build.0 = Release|x64
+		{554FFA86-8431-4437-9EC2-591A6D648444}.Release|x86.ActiveCfg = Release|Win32
+		{554FFA86-8431-4437-9EC2-591A6D648444}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

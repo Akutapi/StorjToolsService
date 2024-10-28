@@ -25,19 +25,19 @@ BOOL __stdcall StopDependentServices(void);
 //   Entry point function. Executes specified command from user.
 //
 // Parameters:
-//   Command-line syntax is: svccontrol [command] [service_name]
+//   Command-line syntax is: SreoJLoGServiceControl [command] [service_name]
 // 
 // Return value:
 //   None
 //
-void _tmain(int argc, TCHAR* argv[])
+int _tmain(int argc, TCHAR* argv[])
 {
     printf("\n");
     if (argc != 3)
     {
         printf("ERROR: Incorrect number of arguments\n\n");
         DisplayUsage();
-        return;
+        return 1;
     }
 
     StringCchCopy(szCommand, 10, argv[1]);
@@ -54,6 +54,7 @@ void _tmain(int argc, TCHAR* argv[])
         _tprintf(TEXT("Unknown command (%s)\n\n"), szCommand);
         DisplayUsage();
     }
+	return 0;
 }
 
 VOID __stdcall DisplayUsage()
@@ -61,7 +62,7 @@ VOID __stdcall DisplayUsage()
     printf("Description:\n");
     printf("\tCommand-line tool that controls a service.\n\n");
     printf("Usage:\n");
-    printf("\tsvccontrol [command] [service_name]\n\n");
+    printf("\tStroJLogServiceControl [command] [service_name]\n\n");
     printf("\t[command]\n");
     printf("\t  start\n");
     printf("\t  dacl\n");
@@ -185,7 +186,7 @@ VOID __stdcall DoStartSvc()
         }
         else
         {
-            if (GetTickCount() - dwStartTickCount > ssStatus.dwWaitHint)
+            if (GetTickCount64() - dwStartTickCount > ssStatus.dwWaitHint)
             {
                 printf("Timeout waiting for service to stop\n");
                 CloseServiceHandle(schService);
@@ -266,7 +267,7 @@ VOID __stdcall DoStartSvc()
         }
         else
         {
-            if (GetTickCount() - dwStartTickCount > ssStatus.dwWaitHint)
+            if (GetTickCount64() - dwStartTickCount > ssStatus.dwWaitHint)
             {
                 // No progress made within the wait hint.
                 break;
@@ -304,6 +305,7 @@ VOID __stdcall DoStartSvc()
 // Return value:
 //   None
 //
+
 VOID __stdcall DoUpdateSvcDacl()
 {
     EXPLICIT_ACCESS      ea;
@@ -317,6 +319,7 @@ VOID __stdcall DoUpdateSvcDacl()
     DWORD                dwSize = 0;
     DWORD                dwBytesNeeded = 0;
 
+    ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     // Get a handle to the SCM database. 
 
     schSCManager = OpenSCManager(
@@ -389,7 +392,7 @@ VOID __stdcall DoUpdateSvcDacl()
 
     // Build the ACE.
 
-    BuildExplicitAccessWithName(&ea, TEXT("GUEST"),
+    BuildExplicitAccessWithName(&ea, const_cast<LPWSTR>(L"GUEST"),
         SERVICE_START | SERVICE_STOP | READ_CONTROL | DELETE,
         SET_ACCESS, NO_INHERITANCE);
 
@@ -539,7 +542,7 @@ VOID __stdcall DoStopSvc()
             goto stop_cleanup;
         }
 
-        if (GetTickCount() - dwStartTime > dwTimeout)
+        if (GetTickCount64() - dwStartTime > dwTimeout)
         {
             printf("Service stop timed out.\n");
             goto stop_cleanup;
@@ -580,7 +583,7 @@ VOID __stdcall DoStopSvc()
         if (ssp.dwCurrentState == SERVICE_STOPPED)
             break;
 
-        if (GetTickCount() - dwStartTime > dwTimeout)
+        if (GetTickCount64() - dwStartTime > dwTimeout)
         {
             printf("Wait timed out\n");
             goto stop_cleanup;
@@ -632,7 +635,7 @@ BOOL __stdcall StopDependentServices()
             if (!EnumDependentServices(schService, SERVICE_ACTIVE,
                 lpDependencies, dwBytesNeeded, &dwBytesNeeded,
                 &dwCount))
-                return FALSE;
+                _leave;
 
             for (i = 0; i < dwCount; i++)
             {
@@ -643,14 +646,14 @@ BOOL __stdcall StopDependentServices()
                     SERVICE_STOP | SERVICE_QUERY_STATUS);
 
                 if (!hDepService)
-                    return FALSE;
+                    _leave;
 
                 __try {
                     // Send a stop code.
                     if (!ControlService(hDepService,
                         SERVICE_CONTROL_STOP,
                         (LPSERVICE_STATUS)&ssp))
-                        return FALSE;
+                        _leave;
 
                     // Wait for the service to stop.
                     while (ssp.dwCurrentState != SERVICE_STOPPED)
@@ -662,13 +665,13 @@ BOOL __stdcall StopDependentServices()
                             (LPBYTE)&ssp,
                             sizeof(SERVICE_STATUS_PROCESS),
                             &dwBytesNeeded))
-                            return FALSE;
+                            _leave;
 
                         if (ssp.dwCurrentState == SERVICE_STOPPED)
                             break;
 
-                        if (GetTickCount() - dwStartTime > dwTimeout)
-                            return FALSE;
+                        if (GetTickCount64() - dwStartTime > dwTimeout)
+                            _leave;
                     }
                 }
                 __finally

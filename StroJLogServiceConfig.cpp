@@ -21,7 +21,7 @@ VOID __stdcall DoDeleteSvc(void);
 //   Entry point function. Executes specified command from user.
 //
 // Parameters:
-//   Command-line syntax is: svcconfig [command] [service_path]
+//   Command-line syntax is: StoroJLogServiceconfig [command] [service_path]
 // 
 // Return value:
 //   None, defaults to 0 (zero)
@@ -33,7 +33,7 @@ int __cdecl _tmain(int argc, TCHAR* argv[])
     {
         printf("ERROR:\tIncorrect number of arguments\n\n");
         DisplayUsage();
-        return;
+        return 0;
     }
 
     StringCchCopy(szCommand, 10, argv[1]);
@@ -53,7 +53,9 @@ int __cdecl _tmain(int argc, TCHAR* argv[])
     {
         _tprintf(TEXT("Unknown command (%s)\n\n"), szCommand);
         DisplayUsage();
+		return 0;
     }
+	return 0;
 }
 
 VOID __stdcall DisplayUsage()
@@ -61,7 +63,7 @@ VOID __stdcall DisplayUsage()
     printf("Description:\n");
     printf("\tCommand-line tool that configures a service.\n\n");
     printf("Usage:\n");
-    printf("\tsvcconfig [command] [service_name]\n\n");
+    printf("\tStrojLogServiceConfig [command] [service_name]\n\n");
     printf("\t[command]\n");
     printf("\t  query\n");
     printf("\t  describe\n");
@@ -82,11 +84,11 @@ VOID __stdcall DisplayUsage()
 //
 VOID __stdcall DoQuerySvc()
 {
-    SC_HANDLE schSCManager;
-    SC_HANDLE schService;
-    LPQUERY_SERVICE_CONFIG lpsc;
-    LPSERVICE_DESCRIPTION lpsd;
-    DWORD dwBytesNeeded, cbBufSize, dwError;
+    SC_HANDLE schSCManager = NULL;
+    SC_HANDLE schService = NULL;
+    LPQUERY_SERVICE_CONFIG lpsc = NULL;
+    LPSERVICE_DESCRIPTION lpsd = NULL;
+    DWORD dwBytesNeeded = 0, cbBufSize = 0, dwError = 0;
 
     // Get a handle to the SCM database. 
 
@@ -136,7 +138,7 @@ VOID __stdcall DoQuerySvc()
         }
     }
 
-    if (!QueryServiceConfig(
+    if (lpsc == NULL || !QueryServiceConfig(
         schService,
         lpsc,
         cbBufSize,
@@ -158,6 +160,11 @@ VOID __stdcall DoQuerySvc()
         {
             cbBufSize = dwBytesNeeded;
             lpsd = (LPSERVICE_DESCRIPTION)LocalAlloc(LMEM_FIXED, cbBufSize);
+            if (lpsd == NULL)
+            {
+                printf("Allocation failed\n");
+                goto cleanup;
+            }
         }
         else
         {
@@ -186,21 +193,30 @@ VOID __stdcall DoQuerySvc()
     _tprintf(TEXT("  Binary path: %s\n"), lpsc->lpBinaryPathName);
     _tprintf(TEXT("  Account: %s\n"), lpsc->lpServiceStartName);
 
-    if (lpsd->lpDescription != NULL && lstrcmp(lpsd->lpDescription, TEXT("")) != 0)
-        _tprintf(TEXT("  Description: %s\n"), lpsd->lpDescription);
-    if (lpsc->lpLoadOrderGroup != NULL && lstrcmp(lpsc->lpLoadOrderGroup, TEXT("")) != 0)
-        _tprintf(TEXT("  Load order group: %s\n"), lpsc->lpLoadOrderGroup);
-    if (lpsc->dwTagId != 0)
-        _tprintf(TEXT("  Tag ID: %d\n"), lpsc->dwTagId);
-    if (lpsc->lpDependencies != NULL && lstrcmp(lpsc->lpDependencies, TEXT("")) != 0)
-        _tprintf(TEXT("  Dependencies: %s\n"), lpsc->lpDependencies);
+    if (lpsd)
+    {
+        if (lpsd->lpDescription != NULL && lstrcmp(lpsd->lpDescription, TEXT("")) != 0)
+            _tprintf(TEXT("  Description: %s\n"), lpsd->lpDescription);
+        if (lpsc->lpLoadOrderGroup != NULL && lstrcmp(lpsc->lpLoadOrderGroup, TEXT("")) != 0)
+            _tprintf(TEXT("  Load order group: %s\n"), lpsc->lpLoadOrderGroup);
+        if (lpsc->dwTagId != 0)
+            _tprintf(TEXT("  Tag ID: %d\n"), lpsc->dwTagId);
+        if (lpsc->lpDependencies != NULL && lstrcmp(lpsc->lpDependencies, TEXT("")) != 0)
+            _tprintf(TEXT("  Dependencies: %s\n"), lpsc->lpDependencies);
+    }
 
-    LocalFree(lpsc);
-    LocalFree(lpsd);
+
+
 
 cleanup:
-    CloseServiceHandle(schService);
-    CloseServiceHandle(schSCManager);
+    if (lpsc != NULL)
+        LocalFree(lpsc);
+    if (lpsd != NULL)
+        LocalFree(lpsd);
+    if (schService != NULL)
+        CloseServiceHandle(schService);
+    if (schService != NULL)
+        CloseServiceHandle(schSCManager);
 }
 
 //
@@ -348,7 +364,7 @@ VOID __stdcall DoUpdateSvcDesc()
     SC_HANDLE schSCManager;
     SC_HANDLE schService;
     SERVICE_DESCRIPTION sd;
-    LPTSTR szDesc = TEXT("This is a test description");
+    LPTSTR szDesc = const_cast<LPWSTR>(L"This is a test description");
 
     // Get a handle to the SCM database. 
 
