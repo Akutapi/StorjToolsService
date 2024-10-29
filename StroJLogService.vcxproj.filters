@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="StroJLogService.cpp">
+    <ClCompile Include="StrojToolsService.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
     <ClCompile Include="LogReducer.cpp">
@@ -44,5 +44,13 @@
     <ClInclude Include="Logger.h">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Versioninfo.rc">
+      <Filter>Soubory zdrojů</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

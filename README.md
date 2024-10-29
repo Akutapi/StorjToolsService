@@ -1,6 +1,6 @@
-# StroJ Log Reducer Service
+# Stroj Tools Service
 
-StroJ Log Reducer Service is an automated service designed to reduce log files for the decentralized storage system StroJ.
+Stroj Tools Service is an automated service designed to reduce log files for the decentralized storage system Stroj.
 The service is fully automatic and configurable via the `config.yaml` file.
 The service updates its configuration upon startup, restart, or before performing log reduction.
 Therefore, if the configuration change is not urgent, there is no need to restart the service.
@@ -8,7 +8,7 @@ Therefore, if the configuration change is not urgent, there is no need to restar
 ## Features
 - Automated log file reduction
 - Configurable via `config.yaml`
-- Supports multiple StroJ nodes on a single server
+- Supports multiple Stroj nodes on a single server
 
 ## Configuration
 
@@ -20,11 +20,11 @@ The service uses a `config.yaml` file for its configuration. Below is an example
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) file for details.
 
 ## Installation
 
-1. Download the installer from the [releases page](https://github.com/yourusername/stroj-log-reducer/releases).
+1. Download the installer from the [releases page](https://github.com/Akutapi/StroJLogService/releases).
 2. Run the installer and follow the on-screen instructions to complete the installation.
 3. The installer will automatically set up and start the StroJ Log Reducer Service.
 
