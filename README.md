@@ -26,7 +26,7 @@ This project is licensed under the MIT License. See the [![License](https://img.
 
 1. Download the installer from the [releases page](https://github.com/Akutapi/StroJLogService/releases).
 2. Run the installer and follow the on-screen instructions to complete the installation.
-3. The installer will automatically set up and start the StroJ Log Reducer Service.
+3. The installer will automatically set up and start the Stroj Tools Service.
 
 ## Usage
 
