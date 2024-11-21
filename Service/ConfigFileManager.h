@@ -1,22 +1,33 @@
 #pragma once
-#include "Logger.h"
 #include <filesystem>
+#include "Logger.h"
+
 class ConfigFileManager
 {
 public:
-	ConfigFileManager(Logger& logger,std::filesystem::path path);
-	~ConfigFileManager();
-	bool LoadConfigFile();
-	size_t GetMaxLogSize();
-	size_t GetReduceLogSize();
-	int GetReduceLogTimeInHours();
-private:
-	void ReadConfigFile();
-	void CreateConfigFile();
-	int m_maxLogSize;
-	int m_reduceLogSize;
-	int m_reduceLogTimeInHours;
-	Logger& m_logger;
-	std::filesystem::path m_configFilePath;
-};
+    ConfigFileManager(Logger& logger);
+    ~ConfigFileManager();
 
+    void UpdateConfig();
+    int GetReduceLogTimeInHours() const;
+    size_t GetMaxLogSize() const;
+    size_t GetReduceLogSize() const;
+    int GetCheckStrojNodesTimeInHours() const;
+    int GetCheckStrojNodeUpdateTimeInHours() const;
+    
+
+private:
+    void ReadConfigFile();
+    void CreateConfigFile();
+
+    Logger& logger;
+    std::filesystem::path configFilePath;
+
+    // Konfiguraèní hodnoty
+    int configVersion;
+    int reduceLogTimeInHours;
+    double maxLogSize;
+    double reduceLogSize;
+    int checkStrojNodesTimeInHours;
+    int checkStrojNodeUpdateTimeInHours;
+};

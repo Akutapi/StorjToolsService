@@ -14,9 +14,9 @@ Therefore, if the configuration change is not urgent, there is no need to restar
 
 The service uses a `config.yaml` file for its configuration. Below is an example of the configuration file:
 
-- `maxLogSizeInGB`: The maximum size of the log file in gigabytes before reduction is triggered.
-- `reduceLogSizeInGB`: The size to which the log file will be reduced.
-- `reduceLogTimeInHours`: The interval in hours at which the log reduction process will be executed.
+- `Max Log Size In GB`: The maximum size of the log file in gigabytes before reduction is triggered.
+- `Reduce Log Size In GB`: The size to which the log file will be reduced.
+- `Reduce Log Time In Hours`: The interval in hours at which the log reduction process will be executed.
 
 ## License
 

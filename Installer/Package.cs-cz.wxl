@@ -1,0 +1,7 @@
+<WixLocalization xmlns="http://wixtoolset.org/schemas/v4/wxl" Culture="cs-CZ">
+
+  <String Id="DowngradeError" Value="Novější verze [ProductName] je již nainstalována." />
+  <String Id="Eula" Value="cs-CZ\Eula.rtf" />
+  <String Id="ServiceDescription" Value="Stroj Tools Service je služba pro údržbu na serverech s decentralizovaným úložištěm Stroj. Podporuje více uzlů na jednom serveru, čímž zajišťuje efektivní správu a provoz." />
+
+</WixLocalization>
