@@ -10,14 +10,15 @@ public:
 
     void UpdateConfig();
     int GetReduceLogTimeInHours() const;
-    size_t GetMaxLogSize() const;
-    size_t GetReduceLogSize() const;
-    int GetCheckStrojNodesTimeInHours() const;
-    int GetCheckStrojNodeUpdateTimeInHours() const;
+    std::uintmax_t GetMaxLogSize() const;
+    std::uintmax_t GetReduceLogSize() const;
+    int GetCheckStorjNodesTimeInHours() const;
+    int GetCheckStorjNodeUpdateTimeInHours() const;
     
 
 private:
-    void ReadConfigFile();
+	void ReadConfigFile();
+    std::uintmax_t ConvertGBToBytes(float gb) const;
     void CreateConfigFile();
 
     Logger& logger;
@@ -26,8 +27,8 @@ private:
     // Konfiguraèní hodnoty
     int configVersion;
     int reduceLogTimeInHours;
-    double maxLogSize;
-    double reduceLogSize;
-    int checkStrojNodesTimeInHours;
-    int checkStrojNodeUpdateTimeInHours;
+    float maxLogSize;
+    float reduceLogSize;
+    int checkStorjNodesTimeInHours;
+    int checkStorjNodeUpdateTimeInHours;
 };

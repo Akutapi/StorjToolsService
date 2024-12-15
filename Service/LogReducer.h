@@ -6,9 +6,9 @@ class LogReducer
 public:
 	LogReducer(Logger& logger);
 	~LogReducer();
-	bool ReduceLogToTemp(const std::wstring& logsPath, const size_t maxSize, const size_t reducedSize );
+	bool ReduceLogToTemp(const std::wstring& logsPath, const std::uintmax_t maxSize, const std::uintmax_t reducedSize );
 	bool ReplaceLogWithTempFile(const std::wstring& logsPath);
 private:
-	Logger& m_logger;
+	Logger& logger;
 };
 

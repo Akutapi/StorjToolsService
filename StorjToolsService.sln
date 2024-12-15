@@ -15,6 +15,11 @@ Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "Installer", "Installer\Inst
 		{55ACCC66-CC65-446A-A41A-E904C3542A3B} = {55ACCC66-CC65-446A-A41A-E904C3542A3B}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{F314320C-D9DF-4B60-8401-5F82ECF3764E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{55ACCC66-CC65-446A-A41A-E904C3542A3B} = {55ACCC66-CC65-446A-A41A-E904C3542A3B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +74,26 @@ Global
 		{8EC7E300-BF81-4821-95F6-D232A398F274}.Release|x64.Build.0 = Release|x64
 		{8EC7E300-BF81-4821-95F6-D232A398F274}.Release|x86.ActiveCfg = Release|x86
 		{8EC7E300-BF81-4821-95F6-D232A398F274}.Release|x86.Build.0 = Release|x86
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|Any CPU.Build.0 = Debug|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|ARM.ActiveCfg = Debug|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|ARM.Build.0 = Debug|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|ARM64.ActiveCfg = Debug|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|ARM64.Build.0 = Debug|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|x64.ActiveCfg = Debug|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|x64.Build.0 = Debug|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|x86.ActiveCfg = Debug|Win32
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Debug|x86.Build.0 = Debug|Win32
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|Any CPU.ActiveCfg = Release|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|Any CPU.Build.0 = Release|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|ARM.ActiveCfg = Release|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|ARM.Build.0 = Release|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|ARM64.ActiveCfg = Release|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|ARM64.Build.0 = Release|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|x64.ActiveCfg = Release|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|x64.Build.0 = Release|x64
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|x86.ActiveCfg = Release|Win32
+		{F314320C-D9DF-4B60-8401-5F82ECF3764E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

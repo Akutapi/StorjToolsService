@@ -1,6 +1,6 @@
 ﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
      xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
-  <Package Name="Stroj Tools" Manufacturer="Akutapi" Version="0.1.0.12" InstallerVersion="500" Compressed="yes" Scope="perMachine"  UpgradeCode="f2bc4a57-58e8-4120-95f7-b43ed30c4f0a">
+  <Package Name="Storj Tools" Manufacturer="Akutapi" Version="0.1.0.12" InstallerVersion="500" Compressed="yes" Scope="perMachine"  UpgradeCode="f2bc4a57-58e8-4120-95f7-b43ed30c4f0a">
     <Media Id="1" Cabinet="product.cab" EmbedCab="yes" />
     <MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
     <WixVariable Id="WixUILicenseRtf" Value="!(loc.Eula)" />

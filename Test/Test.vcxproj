@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{55accc66-cc65-446a-a41a-e904c3542a3b}</ProjectGuid>
-    <RootNamespace>Service</RootNamespace>
+    <ProjectGuid>{f314320c-d9df-4b60-8401-5f82ecf3764e}</ProjectGuid>
+    <RootNamespace>Test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>StorjToolsService</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -106,7 +105,7 @@
       <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\poiii\source\yaml-cpp-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\poiii\source\yaml-cpp-master\include;C:\Users\poiii\source\repos\Akutapi\StorjToolsService\Service;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,31 +123,24 @@
       <PreprocessorDefinitions>YAML_CPP_STATIC_DEFINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\poiii\source\yaml-cpp-master\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\poiii\source\yaml-cpp-master\include;C:\Users\poiii\source\repos\Akutapi\StorjToolsService\Service;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\poiii\source\yaml-cpp-master\build\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ConfigFileManager.cpp" />
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="LogReducer.cpp" />
-    <ClCompile Include="SCManager.cpp" />
-    <ClCompile Include="StorjToolsService.cpp" />
-    <ClCompile Include="Tools.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ConfigFileManager.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="LogReducer.h" />
-    <ClInclude Include="SCManager.h" />
-    <ClInclude Include="Tools.h" />
+    <ClCompile Include="..\Service\ConfigFileManager.cpp" />
+    <ClCompile Include="..\Service\Logger.cpp" />
+    <ClCompile Include="..\Service\LogReducer.cpp" />
+    <ClCompile Include="..\Service\SCManager.cpp" />
+    <ClCompile Include="..\Service\Tools.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

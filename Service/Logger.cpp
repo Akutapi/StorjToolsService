@@ -1,7 +1,9 @@
 #include "Logger.h"
 #include <windows.h>
 #include <format>
-Logger::Logger(const std::wstring& serviceName) : m_serviceName(serviceName)
+#include <iostream>
+
+Logger::Logger(const std::wstring& _serviceName) : serviceName(_serviceName)
 {
 }
 
@@ -11,18 +13,18 @@ Logger::~Logger()
 
 void Logger::LogInfo(const std::wstring& logMessage)
 {
-	WriteToEventLog(logMessage, EVENTLOG_INFORMATION_TYPE);
+	WriteLog(logMessage, EVENTLOG_INFORMATION_TYPE);
 }
 
 void Logger::LogError(const std::wstring& logMessage)
 {
 	std::wstring ErrorMessage = std::format(L"{} Failed with: {}", logMessage, GetLastError());
-	WriteToEventLog(ErrorMessage, EVENTLOG_ERROR_TYPE);
+	WriteLog(ErrorMessage, EVENTLOG_ERROR_TYPE);
 }
 
 void Logger::LogWarning(const std::wstring& logMessage)
 {
-	WriteToEventLog(logMessage, EVENTLOG_WARNING_TYPE);
+	WriteLog(logMessage, EVENTLOG_WARNING_TYPE);
 }
 
 void Logger::LogTry(const std::wstring& logMessage, const std::string e)
@@ -41,18 +43,51 @@ void Logger::LogTry(const std::wstring& logMessage, const std::string e)
 	}
 	wideCharStr.resize(wideCharLen - 1);
 	std::wstring ErrorMessage = std::format(L"{} Failed with: {}", logMessage, wideCharStr);
-	WriteToEventLog(ErrorMessage, EVENTLOG_ERROR_TYPE);
+	WriteLog(ErrorMessage, EVENTLOG_ERROR_TYPE);
 }
 
 void Logger::WriteToEventLog(const std::wstring& logMessage, int eventType)
 {
 	LPCTSTR lpszStrings[2];
-	HANDLE hEventSource = RegisterEventSource(NULL, m_serviceName.c_str());
+	HANDLE hEventSource = RegisterEventSource(NULL, serviceName.c_str());
 	if (hEventSource)
 	{
-		lpszStrings[0] = m_serviceName.c_str();
+		lpszStrings[0] = serviceName.c_str();
 		lpszStrings[1] = logMessage.c_str();
 		ReportEvent(hEventSource, eventType, 0, 0, NULL, 2, 0, lpszStrings, NULL);
 		DeregisterEventSource(hEventSource);
 	}
 }
+
+void Logger::WriteLogToConsole(const std::wstring& logMessage, int eventType)
+{
+	// Výpis do konzole pro testování
+	std::wstring event;
+	switch (eventType)
+	{
+	case EVENTLOG_INFORMATION_TYPE:
+		event = L"INFO: ";
+		break;
+	case EVENTLOG_ERROR_TYPE:
+		event = L"ERROR: ";
+		break;
+	case EVENTLOG_WARNING_TYPE:
+		event = L"WARNING: ";
+		break;
+	default:
+		event = L"UNKNOWN: ";
+		break;
+	}
+	std::wcout << event << logMessage << std::endl;
+}
+
+void Logger::WriteLog(const std::wstring& logMessage, int eventType)
+{
+	if (serviceName != L"Test")
+	{
+		WriteToEventLog(logMessage, eventType);
+		return;
+	}
+	WriteLogToConsole(logMessage, eventType);
+}
+

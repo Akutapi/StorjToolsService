@@ -1,6 +1,6 @@
-# Stroj Tools Service
+# Storj Tools Service
 
-Stroj Tools Service is an automated service designed to reduce log files for the decentralized storage system Stroj.
+Storj Tools Service is an automated service designed to reduce log files for the decentralized storage system Storj.
 The service is fully automatic and configurable via the `config.yaml` file.
 The service updates its configuration upon startup, restart, or before performing log reduction.
 Therefore, if the configuration change is not urgent, there is no need to restart the service.
@@ -26,7 +26,7 @@ This project is licensed under the MIT License. See the [![License](https://img.
 
 1. Download the installer from the [releases page](https://github.com/Akutapi/StroJLogService/releases).
 2. Run the installer and follow the on-screen instructions to complete the installation.
-3. The installer will automatically set up and start the Stroj Tools Service.
+3. The installer will automatically set up and start the Storj Tools Service.
 
 ## Usage
 

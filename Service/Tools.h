@@ -28,8 +28,8 @@ public:
 	std::vector<TimerInfo> GetTimers();
 	ConfigFileManager& UpdateConfigFromFile();
 	bool LogMaintenance();
-	bool CheckStrojNodesStatus();
-	bool CheckStrojNodeUpdate();
+	bool CheckStorjNodesStatus();
+	bool CheckStorjNodeUpdate();
 private:
 	Logger logger;
 	LogReducer logReducer;

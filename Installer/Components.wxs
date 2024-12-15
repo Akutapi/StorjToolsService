@@ -1,21 +1,21 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Fragment>
     <ComponentGroup Id="Components" Directory="INSTALLFOLDER">
-      <Component Id="StrojToolsServiceComponent" Guid="D3D42E1F-3D7C-4AD9-8997-4C1E33DA2F81">
-        <File Id="StrojToolsServiceExe" Source="C:\Users\poiii\source\repos\Akutapi\StrojToolsService\x64\Release\StrojToolsService.exe" KeyPath="yes" />
+      <Component Id="StorjToolsServiceComponent" Guid="D3D42E1F-3D7C-4AD9-8997-4C1E33DA2F81">
+        <File Id="StorjToolsServiceExe" Source="C:\Users\poiii\source\repos\Akutapi\StorjToolsService\x64\Release\StorjToolsService.exe" KeyPath="yes" />
         <ServiceInstall
-          Id="StrojToolsServiceInstaller"
+          Id="StorjToolsServiceInstaller"
           Type="ownProcess"
-          Name="StrojToolsService"
-          DisplayName="Stroj Tools Service"
+          Name="StorjToolsService"
+          DisplayName="Storj Tools Service"
           Description="!(loc.ServiceDescription)"
           Start="auto"
           Account="LocalSystem"
           ErrorControl="normal"
           Vital="yes" />
         <ServiceControl
-          Id="StartStrojToolsService"
-          Name="StrojToolsService"
+          Id="StartStorjToolsService"
+          Name="StorjToolsService"
           Start="install"
           Stop="both"
           Remove="uninstall"

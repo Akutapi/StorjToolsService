@@ -10,7 +10,9 @@ public:
 	void LogWarning(const std::wstring& logMessage);
     void LogTry(const std::wstring& logMessage, const std::string e);
 private:
-	std::wstring m_serviceName;
+	std::wstring serviceName;
 	void WriteToEventLog(const std::wstring& logMessage, int eventType);
+	void WriteLogToConsole(const std::wstring& logMessage, int eventType);
+	void WriteLog(const std::wstring& logMessage, int eventType);
 };
 

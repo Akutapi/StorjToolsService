@@ -4,17 +4,15 @@
 #include <iostream>
 #include <Windows.h>
 
-#define GB(x) ((size_t)(x) * 1024 * 1024 * 1024)
 #define CONFIG_FILE_NAME L"config.yaml"
 #define CONFIG_VERSION 1
 
-ConfigFileManager::ConfigFileManager(Logger& _logger) : logger(_logger), configVersion(CONFIG_VERSION), reduceLogTimeInHours(24), maxLogSize(5), reduceLogSize(0.5), checkStrojNodesTimeInHours(0), checkStrojNodeUpdateTimeInHours(0)
+ConfigFileManager::ConfigFileManager(Logger& _logger) : logger(_logger), configVersion(CONFIG_VERSION), reduceLogTimeInHours(24), maxLogSize(5), reduceLogSize(0.5), checkStorjNodesTimeInHours(0), checkStorjNodeUpdateTimeInHours(0)
 {
     wchar_t buffer[MAX_PATH];
     GetModuleFileNameW(NULL, buffer, MAX_PATH);
     std::filesystem::path exePath = std::filesystem::path(buffer).parent_path();
     configFilePath = exePath / CONFIG_FILE_NAME;
-    logger.LogInfo(L"Config file path: " + configFilePath.wstring());
 }
 
 ConfigFileManager::~ConfigFileManager()
@@ -32,24 +30,24 @@ int ConfigFileManager::GetReduceLogTimeInHours() const
     return reduceLogTimeInHours;
 }
 
-size_t ConfigFileManager::GetMaxLogSize() const
+std::uintmax_t ConfigFileManager::GetMaxLogSize() const
 {
-    return GB(maxLogSize);
+    return ConvertGBToBytes(maxLogSize);
 }
 
-size_t ConfigFileManager::GetReduceLogSize() const
+std::uintmax_t ConfigFileManager::GetReduceLogSize() const
 {
-    return GB(reduceLogSize);
+    return ConvertGBToBytes(reduceLogSize);
 }
 
-int ConfigFileManager::GetCheckStrojNodesTimeInHours() const
+int ConfigFileManager::GetCheckStorjNodesTimeInHours() const
 {
-    return checkStrojNodesTimeInHours;
+    return checkStorjNodesTimeInHours;
 }
 
-int ConfigFileManager::GetCheckStrojNodeUpdateTimeInHours() const
+int ConfigFileManager::GetCheckStorjNodeUpdateTimeInHours() const
 {
-    return checkStrojNodeUpdateTimeInHours;
+    return checkStorjNodeUpdateTimeInHours;
 }
 
 void ConfigFileManager::ReadConfigFile()
@@ -93,7 +91,7 @@ void ConfigFileManager::ReadConfigFile()
 
     if (config["Max Log Size In GB"])
     {
-        maxLogSize = config["Max Log Size In GB"].as<double>();
+        maxLogSize = config["Max Log Size In GB"].as<float>();
     }
     else
     {
@@ -102,7 +100,7 @@ void ConfigFileManager::ReadConfigFile()
 
     if (config["Reduce Log Size In GB"])
     {
-        reduceLogSize = config["Reduce Log Size In GB"].as<double>();
+        reduceLogSize = config["Reduce Log Size In GB"].as<float>();
     }
     else
     {
@@ -111,7 +109,7 @@ void ConfigFileManager::ReadConfigFile()
 
     if (config["Check StrojNodes Time In Hours"])
     {
-        checkStrojNodesTimeInHours = config["Check StrojNodes Time In Hours"].as<int>();
+        checkStorjNodesTimeInHours = config["Check StrojNodes Time In Hours"].as<int>();
     }
     else
     {
@@ -120,12 +118,18 @@ void ConfigFileManager::ReadConfigFile()
 
     if (config["Check StrojNode Update Time In Hours"])
     {
-        checkStrojNodeUpdateTimeInHours = config["Check StrojNode Update Time In Hours"].as<int>();
+        checkStorjNodeUpdateTimeInHours = config["Check StrojNode Update Time In Hours"].as<int>();
     }
     else
     {
         logger.LogWarning(L"Config file: checkStrojNodeUpdateTimeInHours not found, using default value.");
     }
+}
+
+std::uintmax_t ConfigFileManager::ConvertGBToBytes(float gb) const
+{
+    // Pøevedení GB na bajty
+    return static_cast<std::uintmax_t>(std::abs(gb) * 1024 * 1024 * 1024);
 }
 
 void ConfigFileManager::CreateConfigFile()
@@ -148,9 +152,9 @@ void ConfigFileManager::CreateConfigFile()
     out << YAML::Key << "Max Log Size In GB" << YAML::Value << maxLogSize;
     out << YAML::Key << "Reduce Log Size In GB" << YAML::Value << reduceLogSize;
     out << YAML::Newline << YAML::Newline << YAML::Comment("Stroj Nodes Health Check Configuration: Function not supported") << YAML::Newline;
-    out << YAML::Key << "Check StrojNodes Time In Hours" << YAML::Value << checkStrojNodesTimeInHours;
+    out << YAML::Key << "Check StrojNodes Time In Hours" << YAML::Value << checkStorjNodesTimeInHours;
     out << YAML::Newline << YAML::Newline << YAML::Comment("Stroj Nodes Update Check Configuration: Function not supported") << YAML::Newline;
-    out << YAML::Key << "Check StrojNode Update Time In Hours" << YAML::Value << checkStrojNodeUpdateTimeInHours;
+    out << YAML::Key << "Check StrojNode Update Time In Hours" << YAML::Value << checkStorjNodeUpdateTimeInHours;
     out << YAML::EndMap;
     fout << out.c_str();
     fout.close();
