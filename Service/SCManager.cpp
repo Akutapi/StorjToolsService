@@ -7,7 +7,7 @@ SCManager::SCManager(Logger& _logger) : logger(_logger)
 	hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
 	if (!hSCManager)
 	{
-		logger.LogError(L"Chyba pøi otevírání správce služeb: ");
+		logger.LogError(L"Error opening service manager: ");
 	}
 }
 
@@ -26,13 +26,13 @@ void SCManager::CustomStartService(const std::wstring& serviceName)
     {
         if (!::StartService(hService, 0, NULL))
         {
-            logger.LogError(L"Chyba pøi spuštìní služby: ");
+            logger.LogError(L"Error starting service: ");
         }
         CloseServiceHandle(hService);
     }
     else
     {
-        logger.LogError(L"Službu se nepodaøilo otevøít: ");
+        logger.LogError(L"Failed to open service: ");
     }
 }
 
@@ -41,13 +41,13 @@ bool SCManager::CustomStopService(const std::wstring& serviceName)
     SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_STOP);
     if (!hService)
     {
-        logger.LogError(L"Službu se nepodaøilo otevøít: ");
+        logger.LogError(L"Failed to open service: ");
         return false;
     }
     SERVICE_STATUS serviceStatus;
     if (!ControlService(hService, SERVICE_CONTROL_STOP, &serviceStatus))
     {
-        logger.LogError(L"Chyba pøi zastavování služby: ");
+        logger.LogError(L"Error stopping service: ");
         CloseServiceHandle(hService);
 		return false;
     }
@@ -59,14 +59,14 @@ bool SCManager::CustomStopServiceWithWait(const std::wstring& serviceName)
 {
 	if(!CustomStopService(serviceName))
     {
-        logger.LogError(L"Službu se nepodaøilo zastavit: ");
+        logger.LogError(L"Failed to stop service: ");
         return false;
     }
 
 	SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_QUERY_STATUS);
 	if (!hService)
 	{
-		logger.LogError(L"Službu se nepodaøilo otevøít: ");
+		logger.LogError(L"Failed to open service: ");
 		return false;
 	}
 
@@ -79,27 +79,27 @@ bool SCManager::CustomStopServiceWithWait(const std::wstring& serviceName)
     {
         if (!QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded))
         {
-            logger.LogError(L"Chyba pøi dotazování na stav služby: " + serviceName);
+            logger.LogError(L"Error querying service status: " + serviceName);
             CloseServiceHandle(hService);
             return false;
         }
 
         if (ssp.dwCurrentState == SERVICE_STOPPED)
         {
-            logger.LogInfo(L"Služba byla úspìšnì zastavena: " + serviceName);
+			//logger.LogInfo(L"Služba byla úspìšnì zastavena: " + serviceName); // test log
             CloseServiceHandle(hService);
             return true;
         }
 
         if (GetTickCount64() - dwStartTime > TIMEOUT_SECONDS * 1000)
         {
-            logger.LogError(L"Timeout pøi èekání na zastavení služby: " + serviceName);
+            logger.LogError(L"Timeout waiting for service to stop: " + serviceName);
             CloseServiceHandle(hService);
             return false;
         }
 
 		++pocetpokusu;
-		logger.LogInfo(L"Èekání na zastavení služby: Tick" + pocetpokusu);
+		//logger.LogInfo(L"Èekání na zastavení služby: Tick" + pocetpokusu); // test log
         Sleep(250); // Poèkáme 250 ms pøed dalším dotazem
     }
     
@@ -110,13 +110,13 @@ bool SCManager::CustomPauseService(const std::wstring& serviceName)
     SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_PAUSE_CONTINUE);
     if (!hService)
     {
-        logger.LogError(L"Službu se nepodaøilo otevøít: ");
+        logger.LogError(L"Failed to open service: ");
         return false;
     }
     SERVICE_STATUS serviceStatus;
     if (!ControlService(hService, SERVICE_CONTROL_PAUSE, &serviceStatus))
     {
-        logger.LogError(L"Chyba pøi pozastavování služby: ");
+        logger.LogError(L"Error pausing service: ");
 		CloseServiceHandle(hService);
 		return false;
     }
@@ -129,7 +129,7 @@ bool SCManager::CustomPauseServiceWithWait(const std::wstring& serviceName)
 {
 	if (!CustomPauseService(serviceName))
     {
-        logger.LogError(L"Službu se nepodaøilo pozastavit: ");
+        logger.LogError(L"Failed to pause service: ");
         return false;
     }
 
@@ -149,27 +149,27 @@ bool SCManager::CustomPauseServiceWithWait(const std::wstring& serviceName)
     {
         if (!QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded))
         {
-            logger.LogError(L"Chyba pøi dotazování na stav služby: " + serviceName);
+            logger.LogError(L"Error querying service status: " + serviceName);
             CloseServiceHandle(hService);
             return false;
         }
 
         if (ssp.dwCurrentState == SERVICE_PAUSED)
         {
-            logger.LogInfo(L"Služba byla úspìšnì zastavena: " + serviceName);
+			//logger.LogInfo(L"Služba byla úspìšnì zastavena: " + serviceName); // test log
             CloseServiceHandle(hService);
             return true;
         }
 
         if (GetTickCount64() - dwStartTime > TIMEOUT_SECONDS * 1000)
         {
-            logger.LogError(L"Timeout pøi èekání na zastavení služby: " + serviceName);
+            logger.LogError(L"Timeout waiting for service to pause: " + serviceName);
             CloseServiceHandle(hService);
             return false;
         }
 
         ++pocetpokusu;
-        logger.LogInfo(L"Èekání na zastavení služby: Tick" + pocetpokusu);
+		// logger.LogInfo(L"Èekání na zastavení služby: Tick" + pocetpokusu); // test log
         Sleep(250); // Poèkáme 250 ms pøed dalším dotazem
     }
 }
@@ -181,13 +181,13 @@ void SCManager::CustomContinueService(const std::wstring & serviceName)
         SERVICE_STATUS serviceStatus;
         if (!ControlService(hService, SERVICE_CONTROL_CONTINUE, &serviceStatus))
         {
-            logger.LogError(L"Chyba pøi pokraèování služby: ");
+            logger.LogError(L"Error continuing service: ");
         }
         CloseServiceHandle(hService);
     }
     else
     {
-        logger.LogError(L"Službu se nepodaøilo otevøít: ");
+        logger.LogError(L"Failed to open service: ");
     }
 }
 
@@ -198,13 +198,13 @@ DWORD SCManager::GetServiceStatus(const std::wstring& serviceName)
     SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_QUERY_STATUS);
     if (!hService)
     {
-        logger.LogError(L"Službu se nepodaøilo otevøít: ");
+        logger.LogError(L"Failed to open service: ");
         return 0;
     }
     if (!QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO, (LPBYTE)&serviceStatus, sizeof(serviceStatus), &bytesNeeded))
     {
         CloseServiceHandle(hService);
-        logger.LogError(L"Chyba pøi získávání stavu služby: ");
+        logger.LogError(L"Error getting service status: ");
 		return 0;
     }
     CloseServiceHandle(hService);
@@ -225,7 +225,7 @@ std::vector<std::wstring> SCManager::GetServicesByName(const std::wstring& servi
     {
         if (GetLastError() != ERROR_MORE_DATA)
         {
-            logger.LogError(L"Chyba pøi enumeraci služeb: ");
+            logger.LogError(L"Error enumerating services: ");
             return services;
         }
     }
@@ -234,14 +234,14 @@ std::vector<std::wstring> SCManager::GetServicesByName(const std::wstring& servi
     lpServices = (LPENUM_SERVICE_STATUS)LocalAlloc(LPTR, bytesNeeded);
     if (lpServices == nullptr)
     {
-        logger.LogError(L"Chyba pøi alokaci pamìti: ");
+        logger.LogError(L"Error allocating memory: ");
         return services;
     }
 
     // Získání seznamu služeb
     if (!EnumServicesStatus(hSCManager, SERVICE_TYPE_ALL, SERVICE_STATE_ALL, lpServices, bytesNeeded, &bytesNeeded, &serviceCount, &resumeHandle))
     {
-        logger.LogError(L"Chyba pøi enumeraci služeb: ");
+        logger.LogError(L"Error enumerating services: ");
         LocalFree(lpServices);
         return services;
     }

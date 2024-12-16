@@ -246,8 +246,8 @@ VOID StartTimer(Tools::TimerInfo& timer)
         logger.LogError(L"CreateWaitableTimer failed.");
     }
     liDueTime.QuadPart = -static_cast<LONGLONG>(2) * 10000000; // Nastavení na 2 sec , Set to 2 sec
-    //int interval *= 60 * 60 * 1000; // hodiny na milisekundy, hours to milliseconds
-    int interval = 1000; // interval s sekundách pro testování, interval in seconds for testing
+    int interval = 60 * 60 * 1000; //interval v hodinách
+    //int interval = 1000; // interval v sekundách pro testování, interval in seconds for testing
     if (timer.interval == 0)
     {
         timer.isRunning = false;
@@ -298,8 +298,8 @@ VOID CheckAndModifyTimer(Tools::TimerInfo& timer)
     //liDueTime.QuadPart = -static_cast<LONGLONG>(timer.interval) * 60 * 60 * 1000 * 10000; // pøevod hodin na 100-nanosekundové intervaly, convert hours to 100-nanosecond intervals
     liDueTime.QuadPart = -static_cast<LONGLONG>(timer.interval) * 10000000; // doèasnì v sekundách místo hodin, temporarily in seconds instead of hours
 
-    //interval *= 60 * 60 * 1000; // hodiny na milisekundy, hours to milliseconds
-    int interval = 1000; // interval s sekundách pro testování , interval in seconds for testing
+    int interval = 60 * 60 * 1000; //interval v hodinách
+    //int interval = 1000; // interval s sekundách pro testování , interval in seconds for testing
     if (timer.interval == 0)
 	{
 		timer.isRunning = false;

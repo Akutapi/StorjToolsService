@@ -50,12 +50,7 @@ bool Tools::LogMaintenance()
 		logger.LogWarning(L"No StroJ Nodes found.");
 		return true;
 	}
-	logger.LogInfo(std::format(L"Nalezeno StroJ Nodù: {}", services.size())); // test log
-
-	for (auto& service : services)
-	{
-		logger.LogInfo(std::format(L"Service: {}", service)); // test log
-	}
+	//logger.LogInfo(std::format(L"Nalezeno StroJ Nodù: {}", services.size())); // test log
 
 	// kontrola existence souboru a jeho velikosti
 	std::vector<std::wstring> servicesToMaintain;
@@ -69,10 +64,10 @@ bool Tools::LogMaintenance()
 		}
 		if (std::filesystem::file_size(logPath) <= config.GetMaxLogSize())
 		{
-			logger.LogInfo(std::format(L"Log file není tøeba redukovat: {}", logPath));	// test log
+			//logger.LogInfo(std::format(L"Log file není tøeba redukovat: {}", logPath));	
 			continue;			
 		}
-		logger.LogInfo(std::format(L"Log file musí být redukován: {}", logPath));    // test log
+		//logger.LogInfo(std::format(L"Log file musí být redukován: {}", logPath));    // test log
 		servicesToMaintain.push_back(service);
 	}
 	// Pokud nejsou žádné StroJ Nody k redukci log souborù, skonèí
@@ -82,7 +77,7 @@ bool Tools::LogMaintenance()
 		return true;
 	}
 
-	logger.LogInfo(std::format(L"Nalezeno StroJ Nodù k redukci log souborù: {}", servicesToMaintain.size())); // test log
+	//logger.LogInfo(std::format(L"Nalezeno StroJ Nodù k redukci log souborù: {}", servicesToMaintain.size())); // test log
 	// Pro každý StroJ Nod provede redukci log souboru do temp souboru
 	for (auto& service : servicesToMaintain)
 	{
@@ -90,11 +85,11 @@ bool Tools::LogMaintenance()
 		std::wstring logPath = std::filesystem::path(scManager.GetServicePathByName(service)).parent_path() / LOG_FILE_NAME;
 		if (logReducer.ReduceLogToTemp(logPath, config.GetMaxLogSize(), config.GetReduceLogSize()))
 		{
-			logger.LogInfo(std::format(L"Log soubor redukován: {}", logPath)); // test log
+			//logger.LogInfo(std::format(L"Log soubor redukován: {}", logPath)); // test log
 		}
 		else
 		{
-			logger.LogError(std::format(L"Log soubor redukce selhala: {}", logPath)); // test log
+			logger.LogError(std::format(L"Log soubor redukce selhala: {}", logPath)); 
 			servicesToMaintain.erase(std::remove(servicesToMaintain.begin(), servicesToMaintain.end(), service), servicesToMaintain.end());	
 		}
 	}
@@ -104,30 +99,30 @@ bool Tools::LogMaintenance()
 		logger.LogError(L"Log soubory redukce selhala pro všechny StroJ Nody.");
 		return false;
 	}
-	logger.LogInfo(L"Vytvoøeny doèasné soubory s redukovanou velikostí."); // test log
+	//logger.LogInfo(L"Vytvoøeny doèasné soubory s redukovanou velikostí."); // test log
 
 
 	// Pro každý StroJ Nod pøepíše log soubor temp souborem
 	for (auto& service : servicesToMaintain)
 	{
 		// Stop service
-		logger.LogInfo(std::format(L"Zastavuji servis: {}", service)); // test log
+		//logger.LogInfo(std::format(L"Zastavuji servis: {}", service)); // test log
 		scManager.CustomStopServiceWithWait(service);
-		logger.LogInfo(std::format(L"Servis zastaven: {}", service)); // test log
+		//logger.LogInfo(std::format(L"Servis zastaven: {}", service)); // test log
 		// Nahrazení log souboru temp souborem
 		std::wstring logPath = std::filesystem::path(scManager.GetServicePathByName(service)).parent_path() / LOG_FILE_NAME;
 		if (logReducer.ReplaceLogWithTempFile(logPath))
 		{
-			logger.LogInfo(std::format(L"Log soubor nahrazen redukovaným doèasným souborem.")); // test log
+			//logger.LogInfo(std::format(L"Log soubor nahrazen redukovaným doèasným souborem.")); // test log
 		}
 		else
 		{
-			logger.LogError(std::format(L"Log soubor nahrazení selhalo: {}", logPath)); // test log
+			logger.LogError(std::format(L"Log soubor nahrazení selhalo: {}", logPath)); 
 		}
 		// Start service
-		logger.LogInfo(std::format(L"Spuštìní servisu: {}", service)); // test log
+		//logger.LogInfo(std::format(L"Spuštìní servisu: {}", service)); // test log
 		scManager.CustomStartService(service);
-		logger.LogInfo(std::format(L"Servis spuštìn: {}", service)); // test log
+		//logger.LogInfo(std::format(L"Servis spuštìn: {}", service)); // test log
 	}
 	logger.LogInfo(L"Maintenanc done.");
 	return true;
