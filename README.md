@@ -25,8 +25,8 @@ This project is licensed under the MIT License. See the [![License](https://img.
 ## Installation
 
 1. Download the installer from the [releases page](https://github.com/Akutapi/StroJLogService/releases).
-     ⚠ Note: The installer uses a private certificate for signing, so it may be flagged as untrusted software.
-     To proceed, you might need to manually confirm the installation.
+	1. ⚠ Note: The installer uses a private certificate for signing, so it may be flagged as untrusted software.
+	1. To proceed, you might need to manually confirm the installation.
 2. Run the installer and follow the on-screen instructions to complete the installation.
 3. The installer will automatically set up and start the Storj Tools Service.
 
