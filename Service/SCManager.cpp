@@ -1,3 +1,9 @@
+/*
+  Soubor: SCManager.cpp
+  Popis: Tøída pro správu služeb Windows Service
+  Autor: Akutapi
+  Datum: 16-12-2024
+ */
 #include "SCManager.h"
 #include <iostream>
 
@@ -21,6 +27,13 @@ SCManager::~SCManager()
 
 void SCManager::CustomStartService(const std::wstring& serviceName)
 {
+	// kontrola, zda služba již není spuštìna nebo se nespouští
+	if (GetServiceStatus(serviceName) == SERVICE_RUNNING || GetServiceStatus(serviceName) == SERVICE_START_PENDING)
+	{
+		logger.LogWarning(L"Service is already running or starting " + serviceName);
+		return ;
+	}
+
     SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_START);
     if (hService)
     {
@@ -38,6 +51,13 @@ void SCManager::CustomStartService(const std::wstring& serviceName)
 
 bool SCManager::CustomStopService(const std::wstring& serviceName)
 {
+	// kontrola, zda služba již není zastavena nebo se zastavuje
+	if (GetServiceStatus(serviceName) == SERVICE_STOPPED || GetServiceStatus(serviceName) == SERVICE_STOP_PENDING)
+	{
+		logger.LogWarning(L"Service is already stopped or stopping " + serviceName);
+		return true;
+	}
+
     SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_STOP);
     if (!hService)
     {
@@ -73,7 +93,6 @@ bool SCManager::CustomStopServiceWithWait(const std::wstring& serviceName)
     SERVICE_STATUS_PROCESS ssp;
     DWORD dwBytesNeeded;
     ULONGLONG dwStartTime = GetTickCount64();
-	int pocetpokusu = 0;
 
     while (true)
     {
@@ -86,7 +105,6 @@ bool SCManager::CustomStopServiceWithWait(const std::wstring& serviceName)
 
         if (ssp.dwCurrentState == SERVICE_STOPPED)
         {
-			//logger.LogInfo(L"Služba byla úspìšnì zastavena: " + serviceName); // test log
             CloseServiceHandle(hService);
             return true;
         }
@@ -97,9 +115,6 @@ bool SCManager::CustomStopServiceWithWait(const std::wstring& serviceName)
             CloseServiceHandle(hService);
             return false;
         }
-
-		++pocetpokusu;
-		//logger.LogInfo(L"Èekání na zastavení služby: Tick" + pocetpokusu); // test log
         Sleep(250); // Poèkáme 250 ms pøed dalším dotazem
     }
     
@@ -136,14 +151,13 @@ bool SCManager::CustomPauseServiceWithWait(const std::wstring& serviceName)
 	SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_QUERY_STATUS);
 	if (!hService)
     {
-	   	logger.LogError(L"Službu se nepodaøilo otevøít: ");
+	   	logger.LogError(L"Failed to open service: ");
 		return false; 
 	}
 
     SERVICE_STATUS_PROCESS ssp;
     DWORD dwBytesNeeded;
     ULONGLONG dwStartTime = GetTickCount64();
-    int pocetpokusu = 0;
 
     while (true)
     {
@@ -156,7 +170,6 @@ bool SCManager::CustomPauseServiceWithWait(const std::wstring& serviceName)
 
         if (ssp.dwCurrentState == SERVICE_PAUSED)
         {
-			//logger.LogInfo(L"Služba byla úspìšnì zastavena: " + serviceName); // test log
             CloseServiceHandle(hService);
             return true;
         }
@@ -167,9 +180,6 @@ bool SCManager::CustomPauseServiceWithWait(const std::wstring& serviceName)
             CloseServiceHandle(hService);
             return false;
         }
-
-        ++pocetpokusu;
-		// logger.LogInfo(L"Èekání na zastavení služby: Tick" + pocetpokusu); // test log
         Sleep(250); // Poèkáme 250 ms pøed dalším dotazem
     }
 }

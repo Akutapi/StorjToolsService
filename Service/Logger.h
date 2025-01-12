@@ -1,3 +1,9 @@
+/*
+Soubor:  Logger.h
+Popis:   Tøída pro logování do konzole a do event logu
+Autor:   Akutapi
+Datum:   30-11-2024
+*/
 #pragma once
 #include <string>
 class Logger

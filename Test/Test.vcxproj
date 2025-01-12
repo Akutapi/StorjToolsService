@@ -139,6 +139,7 @@
     <ClCompile Include="..\Service\Logger.cpp" />
     <ClCompile Include="..\Service\LogReducer.cpp" />
     <ClCompile Include="..\Service\SCManager.cpp" />
+    <ClCompile Include="..\Service\ServiceUpdater.cpp" />
     <ClCompile Include="..\Service\Tools.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

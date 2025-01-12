@@ -1,8 +1,16 @@
+/*
+ Soubor:  Tools.h
+ Popis:  Tøída spravující nástroje pro službu.
+ Autor:  Akutapi
+ Datum:  6-12-2024
+*/
+
 #pragma once
 #include "ConfigFileManager.h"
 #include "LogReducer.h"
 #include "SCManager.h"
 #include "Logger.h"
+#include "ServiceUpdater.h"
 #include <vector>
 #include <functional>
 
@@ -30,10 +38,12 @@ public:
 	bool LogMaintenance();
 	bool CheckStorjNodesStatus();
 	bool CheckStorjNodeUpdate();
+
 private:
+	SCManager scManager;
+	ServiceUpdater serviceUpdater;
 	Logger logger;
 	LogReducer logReducer;
-	SCManager scManager;
 	ConfigFileManager config;
 };
 

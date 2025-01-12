@@ -1,3 +1,9 @@
+/*
+Soubor: LogReducer.cpp
+Popis: Tøída pro redukci logovacího souboru
+Autor: Akutapi
+Datum: 15-12-2024
+*/
 #include "LogReducer.h"
 #include <fstream>
 #include <iostream>

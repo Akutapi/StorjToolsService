@@ -1,3 +1,10 @@
+/*
+Soubor: ConfigFileManager.cpp
+Popis: Tøída pro správu konfiguraèního souboru.
+       Tato tøída využívá knihovnu yaml-cpp pro práci s YAML soubory.
+Autor: Akutapi
+Datum: 15-12-20204
+*/
 #include "ConfigFileManager.h"
 #include <yaml-cpp/yaml.h>
 #include <fstream>
@@ -7,7 +14,7 @@
 #define CONFIG_FILE_NAME L"config.yaml"
 #define CONFIG_VERSION 1
 
-ConfigFileManager::ConfigFileManager(Logger& _logger) : logger(_logger), configVersion(CONFIG_VERSION), reduceLogTimeInHours(24), maxLogSize(5), reduceLogSize(0.5), checkStorjNodesTimeInHours(0), checkStorjNodeUpdateTimeInHours(0)
+ConfigFileManager::ConfigFileManager(Logger& _logger) : logger(_logger), configVersion(CONFIG_VERSION), reduceLogTimeInHours(24), maxLogSize(5), reduceLogSize(0.5), checkStorjNodesTimeInHours(1), checkStorjNodeUpdateTimeInHours(12)
 {
     wchar_t buffer[MAX_PATH];
     GetModuleFileNameW(NULL, buffer, MAX_PATH);

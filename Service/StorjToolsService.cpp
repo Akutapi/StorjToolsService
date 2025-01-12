@@ -37,7 +37,7 @@ VOID WINAPI SvcMain(DWORD, LPTSTR*);
 
 VOID ReportSvcStatus(DWORD, DWORD, DWORD);
 VOID SvcInit(DWORD, LPTSTR*);
-VOID StartTimer(Tools::TimerInfo& timer);
+VOID StartTimer(Tools::TimerInfo& timer, int timeOffset);
 VOID CheckAndModifyTimer(Tools::TimerInfo& timer);
 VOID InitTimers();
 VOID CloseTimers();
@@ -237,7 +237,7 @@ VOID WINAPI SvcCtrlHandler(DWORD dwCtrl)
 
 }
 
-VOID StartTimer(Tools::TimerInfo& timer)
+VOID StartTimer(Tools::TimerInfo& timer, int timeOffset)
 {
     LARGE_INTEGER liDueTime;
     timer.hTimer = CreateWaitableTimer(NULL, FALSE, NULL);
@@ -245,9 +245,16 @@ VOID StartTimer(Tools::TimerInfo& timer)
     {
         logger.LogError(L"CreateWaitableTimer failed.");
     }
-    liDueTime.QuadPart = -static_cast<LONGLONG>(2) * 10000000; // Nastavení na 2 sec , Set to 2 sec
-    int interval = 60 * 60 * 1000; //interval v hodinách
-    //int interval = 1000; // interval v sekundách pro testování, interval in seconds for testing
+
+	// Posunutí èasu pro jednotlivé èasovaèe, aby se snížila režije pøi spouštìní služby
+	// Offset time for individual timers to reduce overhead when starting the service
+	// První spuštìní èasovaèe 2 sec + offset * 5min
+   	// First timer run 2 sec + offset * 5min
+	liDueTime.QuadPart = -static_cast<LONGLONG>(2) * 10000000 + static_cast<LONGLONG>(timeOffset) * 5 * 60 * 1000 * 10000;
+	int interval = 60 * 60 * 1000; //interval v hodinách , interval in hours
+
+    // Nastavení èasovaèe a bìhu služby
+    // Set the timer and run the service
     if (timer.interval == 0)
     {
         timer.isRunning = false;
@@ -295,11 +302,13 @@ VOID CheckAndModifyTimer(Tools::TimerInfo& timer)
 	timer.interval = newInterval;
 
     LARGE_INTEGER liDueTime;
-    //liDueTime.QuadPart = -static_cast<LONGLONG>(timer.interval) * 60 * 60 * 1000 * 10000; // pøevod hodin na 100-nanosekundové intervaly, convert hours to 100-nanosecond intervals
-    liDueTime.QuadPart = -static_cast<LONGLONG>(timer.interval) * 10000000; // doèasnì v sekundách místo hodin, temporarily in seconds instead of hours
+	// První spuštìní po dobì intervalu
+	// First run after the interval time
+    liDueTime.QuadPart = -static_cast<LONGLONG>(timer.interval) * 60 * 60 * 1000 * 10000; // pøevod hodin na 100-nanosekundové intervaly, convert hours to 100-nanosecond intervals
+    int interval = 60 * 60 * 1000; //interval v hodinách, interval in hours
 
-    int interval = 60 * 60 * 1000; //interval v hodinách
-    //int interval = 1000; // interval s sekundách pro testování , interval in seconds for testing
+	// Nastavení èasovaèe a bìhu služby
+	// Set the timer and run the service
     if (timer.interval == 0)
 	{
 		timer.isRunning = false;
@@ -328,10 +337,11 @@ VOID InitTimers()
         return;
     }
 
-	for (Tools::TimerInfo& timer : timers)
-	{
-		StartTimer(timer);
-	}
+    for (size_t i = 0; i < timers.size(); ++i)
+    {
+        int index = static_cast<int>(i);
+        StartTimer(timers[i], index);
+    }
 }
 
 VOID CloseTimers()

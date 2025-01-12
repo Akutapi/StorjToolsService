@@ -33,5 +33,8 @@
     <ClCompile Include="..\Service\Tools.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="..\Service\ServiceUpdater.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

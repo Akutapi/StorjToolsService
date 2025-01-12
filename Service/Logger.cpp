@@ -1,3 +1,9 @@
+/*
+Soubor:  Logger.cpp
+Popis:   Tøída pro logování do konzole a do event logu
+Autor:   Akutapi
+Datum:   30-11-2024
+*/
 #include "Logger.h"
 #include <windows.h>
 #include <format>

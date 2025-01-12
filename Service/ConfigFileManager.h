@@ -1,3 +1,9 @@
+/*
+Soubor: ConfigFileManager.h
+Popis: Tøída pro správu konfiguraèního souboru.
+Autor: Akutapi
+Datum: 15-12-20204
+*/
 #pragma once
 #include <filesystem>
 #include "Logger.h"

@@ -1,3 +1,9 @@
+/*
+Soubor: LogReducer.h
+Popis: Tøída pro redukci logovacího souboru
+Autor: Akutapi
+Datum: 15-12-2024
+*/
 #pragma once
 #include <string>
 #include "Logger.h"

@@ -1,3 +1,9 @@
+/*
+  Soubor: SCManager.h
+  Popis: Tøída pro správu služeb Windows Service
+  Autor: Akutapi
+  Datum: 16-12-2024
+ */
 #pragma once
 #include <windows.h>
 #include <vector>

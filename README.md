@@ -14,9 +14,12 @@ Therefore, if the configuration change is not urgent, there is no need to restar
 
 The service uses a `config.yaml` file for its configuration. Below is an example of the configuration file:
 
-- `Max Log Size In GB`: The maximum size of the log file in gigabytes before reduction is triggered.
-- `Reduce Log Size In GB`: The size to which the log file will be reduced.
-- `Reduce Log Time In Hours`: The interval in hours at which the log reduction process will be executed.
+- `Max Log Size In GB`: The maximum size of the log file in gigabytes before reduction is triggered. (Default: 5 Gb)
+- `Reduce Log Size In GB`: The size to which the log file will be reduced. (Default: 0.5 Gb)
+- `Reduce Log Time In Hours`: The interval in hours at which the log reduction process will be executed. (Default: 24H)
+- `Check StrojNodes Time In Hours`: The interval in hours at which the status of all StrojNodes will be checked. This process verifies whether the nodes are running and active. (Default: 1H)
+                                   (The methods for reporting the status of nodes have not been implemented yet.)
+- `Check StrojNode Update Time In Hours`: The interval in hours at which the update status of StrojNodes will be checked. This process verifies that the nodes are updated to the latest version. (Default: 12H)
 
 ## License
 
