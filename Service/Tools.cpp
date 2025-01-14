@@ -171,7 +171,7 @@ bool Tools::CheckStorjNodesStatus()
 		}
 		else if (status == SERVICE_RUNNING)
 		{
-			logger.LogInfo(std::format(L"Service running: {}", service));
+			//logger.LogInfo(std::format(L"Service running: {}", service));
 		}
 		else
 		{
@@ -188,7 +188,7 @@ bool Tools::CheckStorjNodesStatus()
 
 	//TODO : metody na informování o stavu služeb
 
-	logger.LogInfo(L"Service check: Some services failed.");
+	logger.LogWarning(L"Service check: Some services failed.");
 	return true;
 }
 

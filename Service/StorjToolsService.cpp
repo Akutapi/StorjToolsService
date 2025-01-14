@@ -25,6 +25,14 @@
 // Název služby
 // Service name
 #define SVCNAME const_cast<LPWSTR>(L"StroJToolsService")
+// Èasové hodnoty
+// Time values
+#define SECOND_IN_100NS 10000000LL  // 1 sekunda v 100 ns, 1 second in 100 ns
+#define OFFSET_MULTIPLIER 5         // Offset v minutách, Offset in minutes
+#define MINUTE_IN_100NS (60 * SECOND_IN_100NS)  // 1 minuta v 100 ns, 1 minute in 100 ns
+#define HOUR_IN_MILLISECONDS (60 * 60 * 1000) // 1 hodina v milisekundách, 1 hour in milliseconds
+#define HOUR_IN_100NS (60 * 60 * SECOND_IN_100NS) // 1 hodina v 100 ns, 1 hour in 100 ns
+
 Logger logger(SVCNAME);
 Tools tools(logger);
 std::vector< Tools::TimerInfo> timers;
@@ -250,8 +258,8 @@ VOID StartTimer(Tools::TimerInfo& timer, int timeOffset)
 	// Offset time for individual timers to reduce overhead when starting the service
 	// První spuštìní èasovaèe 2 sec + offset * 5min
    	// First timer run 2 sec + offset * 5min
-	liDueTime.QuadPart = -static_cast<LONGLONG>(2) * 10000000 + static_cast<LONGLONG>(timeOffset) * 5 * 60 * 1000 * 10000;
-	int interval = 60 * 60 * 1000; //interval v hodinách , interval in hours
+	liDueTime.QuadPart = -(2 * SECOND_IN_100NS + static_cast<LONGLONG>(timeOffset) * OFFSET_MULTIPLIER * MINUTE_IN_100NS);
+	int interval = HOUR_IN_MILLISECONDS; //interval v hodinách , interval in hours
 
     // Nastavení èasovaèe a bìhu služby
     // Set the timer and run the service
@@ -304,8 +312,8 @@ VOID CheckAndModifyTimer(Tools::TimerInfo& timer)
     LARGE_INTEGER liDueTime;
 	// První spuštìní po dobì intervalu
 	// First run after the interval time
-    liDueTime.QuadPart = -static_cast<LONGLONG>(timer.interval) * 60 * 60 * 1000 * 10000; // pøevod hodin na 100-nanosekundové intervaly, convert hours to 100-nanosecond intervals
-    int interval = 60 * 60 * 1000; //interval v hodinách, interval in hours
+    liDueTime.QuadPart = -static_cast<LONGLONG>(timer.interval) * HOUR_IN_100NS; // pøevod hodin na 100-nanosekundové intervaly, convert hours to 100-nanosecond intervals
+    int interval = HOUR_IN_MILLISECONDS; //interval v hodinách, interval in hours
 
 	// Nastavení èasovaèe a bìhu služby
 	// Set the timer and run the service
