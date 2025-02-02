@@ -2,7 +2,9 @@
   <Fragment>
     <ComponentGroup Id="Components" Directory="INSTALLFOLDER">
       <Component Id="StorjToolsServiceComponent" Guid="D3D42E1F-3D7C-4AD9-8997-4C1E33DA2F81">
-        <File Id="StorjToolsServiceExe" Source="C:\Users\poiii\source\repos\Akutapi\StorjToolsService\x64\Release\StorjToolsService.exe" KeyPath="yes" />
+        <File Id="StorjToolsServiceExe" Source="..\x64\Release\StorjToolsService.exe" KeyPath="yes" />
+        <File Id="LibCurlDll" Source="..\x64\Release\libcurl.dll" />
+        <File Id="ZlibDll" Source="..\x64\Release\zlib1.dll" />
         <ServiceInstall
           Id="StorjToolsServiceInstaller"
           Type="ownProcess"

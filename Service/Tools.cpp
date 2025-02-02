@@ -14,12 +14,14 @@
 #define LOG_FILE_NAME L"storagenode.log"
 #define EXE_SERVICE_NAME L"storagenode.exe"
 
-Tools::Tools(Logger& _logger) : logger(_logger), logReducer(_logger), scManager(_logger), config(_logger), serviceUpdater(_logger)
+Tools::Tools(Logger& _logger) : logger(_logger), logReducer(_logger), scManager(_logger), config(_logger), serviceUpdater(_logger), discordManager(_logger)
 {
+	SetDiscordManager();
 }
 
 Tools::~Tools()
 {
+	discordManager.sendDM(L"Service stopped.");
 }
 
 std::vector<Tools::TimerInfo> Tools::GetTimers()
@@ -28,9 +30,9 @@ std::vector<Tools::TimerInfo> Tools::GetTimers()
 	config.UpdateConfig();
 	// nastavit custom timery
 	std::vector<TimerInfo> timers;
-	timers.push_back({NULL, false, config.GetReduceLogTimeInHours(), [this]() { this->LogMaintenance(); }, [this](const ConfigFileManager& config) -> int { return config.GetReduceLogTimeInHours(); }});
-	timers.push_back({NULL, false, config.GetCheckStorjNodesTimeInHours(), [this]() { this->CheckStorjNodesStatus(); }, [this](const ConfigFileManager& config) -> int { return config.GetCheckStorjNodesTimeInHours(); }});
-	timers.push_back({NULL, false, config.GetCheckStorjNodeUpdateTimeInHours(), [this]() { this->CheckStorjNodeUpdate(); }, [this](const ConfigFileManager& config) -> int { return config.GetCheckStorjNodeUpdateTimeInHours(); }});
+	timers.push_back({NULL, false, config.GetReduceLogTimeInHours(), [this]() { this->LogMaintenance(); }, [this](const ConfigFileManager& config) -> float { return config.GetReduceLogTimeInHours(); }});
+	timers.push_back({NULL, false, config.GetCheckStorjNodesTimeInHours(), [this]() { this->CheckStorjNodesStatus(); }, [this](const ConfigFileManager& config) -> float { return config.GetCheckStorjNodesTimeInHours(); }});
+	timers.push_back({NULL, false, config.GetCheckStorjNodeUpdateTimeInHours(), [this]() { this->CheckStorjNodeUpdate(); }, [this](const ConfigFileManager& config) -> float { return config.GetCheckStorjNodeUpdateTimeInHours(); }});
 	return timers;
 }
 
@@ -135,8 +137,8 @@ bool Tools::LogMaintenance()
 
 bool Tools::CheckStorjNodesStatus()
 {
-	// Naète konfiguraèní soubor
-	config.UpdateConfig();
+	// Nastavení DiscordManager
+	SetDiscordManager();
 
 	// Získá seznam služeb bez StorJ Update Nodù
 	std::vector<std::wstring> services;
@@ -156,40 +158,67 @@ bool Tools::CheckStorjNodesStatus()
 
 	bool result = true;
 	// Kontrola bìhu služeb
+	std::vector<std::wstring> failedServices;
 	for (auto& service : services)
 	{
 		DWORD status = scManager.GetServiceStatus(service);
-		if (status == 0)
+		switch (status)
 		{
+		case 0:
 			logger.LogError(std::format(L"Error getting service status: {}", service));
-			result = false;
-		}
-		else if (status == SERVICE_STOPPED)
-		{
+			failedServices.push_back(service);
+			break;
+
+		case SERVICE_STOPPED:
 			logger.LogWarning(std::format(L"Service stopped: {}", service));
-			result = false;
-		}
-		else if (status == SERVICE_RUNNING)
-		{
-			//logger.LogInfo(std::format(L"Service running: {}", service));
-		}
-		else
-		{
+			failedServices.push_back(service);
+			break;
+		default:
 			logger.LogWarning(std::format(L"Service status unknown: {}", service));
-			result = false;
+			failedServices.push_back(service);
+			break;
 		}
 	}
 
-	if (result)
+	// Pokus o nastartování služeb, které selhaly
+	int serviceStartCount = 3;
+	while (!failedServices.empty() && serviceStartCount > 0)
+	{
+		std::vector<std::wstring> tempfailedServices;
+		for (auto& service : failedServices)
+		{
+			if (!scManager.CustomStartServiceWithWait(service))
+			{
+				logger.LogWarning(std::format(L"Service start failed: {}", service));
+				tempfailedServices.push_back(service);
+			}
+		}
+		failedServices = tempfailedServices;
+		serviceStartCount--;
+	}
+
+
+	if (failedServices.empty())
 	{
 		logger.LogInfo(L"Services checked: All services are running.");
 		return true;
 	}
 
-	//TODO : metody na informování o stavu služeb
-
-	logger.LogWarning(L"Service check: Some services failed.");
-	return true;
+	// Odeslání zprávy na Discord
+	std::wstring message = L"StorJ Nodes are not running: ";
+	for (auto& service : failedServices)
+	{
+		message.append(service).append(L", ");
+	}
+	message.pop_back();
+	message.pop_back();
+	
+	if(!discordManager.sendDM(message))
+	{
+		logger.LogError(L"Error sending message to Discord.");
+	}
+	logger.LogError(L"Service check: Some services failed.");
+	return false;
 }
 
 bool Tools::CheckStorjNodeUpdate()
@@ -266,6 +295,7 @@ bool Tools::CheckStorjNodeUpdate()
 		return false;
 	}
 
+	std::vector<std::wstring> failedStartServices;
 	// Update Storj Node
 	bool result = true;
 	for (auto& service : allServices)
@@ -282,8 +312,33 @@ bool Tools::CheckStorjNodeUpdate()
 				result = false;
 			}
 			// Start service
-			scManager.CustomStartService(service);
+			if (!scManager.CustomStartServiceWithWait(service))
+			{
+				logger.LogWarning(std::format(L"Service start failed: {}", service));
+				failedStartServices.push_back(service);
+			}
 		}
+	}
+
+	int serviceStartCount = 3;
+	while (!failedStartServices.empty() && serviceStartCount > 0)
+	{
+		std::vector<std::wstring> failedServices;
+		for (auto& service : failedStartServices)
+		{
+			if (!scManager.CustomStartServiceWithWait(service))
+			{
+				logger.LogWarning(std::format(L"Service start failed: {}", service));
+				failedServices.push_back(service);
+			}
+		}
+		failedStartServices = failedServices;
+		serviceStartCount--;
+	}
+
+	if (failedStartServices.empty())
+	{
+		logger.LogInfo(L"All service started.");
 	}
 
 	// Delete shadow copy
@@ -301,4 +356,15 @@ bool Tools::CheckStorjNodeUpdate()
 
 	logger.LogInfo(L"Check and update completed.");
 	return true;
+}
+
+void Tools::SetDiscordManager()
+{
+	// Naète konfiguraèní soubor
+	config.UpdateConfig();
+	// Vytvoøení Discord bota
+	if (!discordManager.SetDiscordBot(config.GetDiscordBotToken(), config.GetDiscordUserID()))
+	{
+		logger.LogError(L"Error creating Discord bot.");
+	}
 }

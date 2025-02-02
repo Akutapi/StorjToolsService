@@ -7,7 +7,6 @@
 #pragma once
 #include <windows.h>
 #include <vector>
-#include <string>
 #include <filesystem>
 #include "Logger.h"
 class SCManager
@@ -15,7 +14,8 @@ class SCManager
 public:
 	SCManager(Logger& logger);
 	~SCManager();
-	void CustomStartService(const std::wstring& serviceName);
+	bool CustomStartService(const std::wstring& serviceName);
+	bool CustomStartServiceWithWait(const std::wstring& serviceName);
 	bool CustomStopService(const std::wstring& serviceName);
 	bool CustomStopServiceWithWait(const std::wstring& serviceName);
 	bool CustomPauseService(const std::wstring& serviceName);

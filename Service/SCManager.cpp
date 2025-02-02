@@ -7,6 +7,7 @@
 #include "SCManager.h"
 #include <iostream>
 
+#define SLEEP_TIME 250
 
 SCManager::SCManager(Logger& _logger) : logger(_logger)
 {
@@ -25,28 +26,75 @@ SCManager::~SCManager()
     }
 }
 
-void SCManager::CustomStartService(const std::wstring& serviceName)
+bool SCManager::CustomStartService(const std::wstring& serviceName)
 {
 	// kontrola, zda služba již není spuštìna nebo se nespouští
 	if (GetServiceStatus(serviceName) == SERVICE_RUNNING || GetServiceStatus(serviceName) == SERVICE_START_PENDING)
 	{
 		logger.LogWarning(L"Service is already running or starting " + serviceName);
-		return ;
+		return true;
 	}
 
     SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_START);
-    if (hService)
+    if (!hService)
     {
-        if (!::StartService(hService, 0, NULL))
-        {
-            logger.LogError(L"Error starting service: ");
-        }
-        CloseServiceHandle(hService);
-    }
-    else
-    {
-        logger.LogError(L"Failed to open service: ");
-    }
+		logger.LogError(L"Failed to open service: ");
+		return false;
+	}
+
+	if (!StartService(hService, 0, NULL))
+	{
+		logger.LogError(L"Error starting service: ");
+		CloseServiceHandle(hService);
+		return false;
+	}
+
+    CloseServiceHandle(hService);
+	return true;
+}
+
+bool SCManager::CustomStartServiceWithWait(const std::wstring& serviceName)
+{
+	if (!CustomStartService(serviceName))
+	{
+		logger.LogError(L"Failed to start service: ");
+		return false;
+	}
+
+	SC_HANDLE hService = OpenService(hSCManager, serviceName.c_str(), SERVICE_QUERY_STATUS);
+	if (!hService)
+	{
+		logger.LogError(L"Failed to open service: ");
+		return false;
+	}
+
+	SERVICE_STATUS_PROCESS ssp;
+	DWORD dwBytesNeeded;
+	ULONGLONG dwStartTime = GetTickCount64();
+
+	while (true)
+	{
+		if (!QueryServiceStatusEx(hService, SC_STATUS_PROCESS_INFO, (LPBYTE)&ssp, sizeof(SERVICE_STATUS_PROCESS), &dwBytesNeeded))
+		{
+			logger.LogError(L"Error querying service status: " + serviceName);
+			CloseServiceHandle(hService);
+			return false;
+		}
+
+		if (ssp.dwCurrentState == SERVICE_RUNNING || ssp.dwCurrentState == SERVICE_START_PENDING)
+		{
+			CloseServiceHandle(hService);
+			return true;
+		}
+
+		if (GetTickCount64() - dwStartTime > TIMEOUT_SECONDS * 1000)
+		{
+			logger.LogError(L"Timeout waiting for service to start: " + serviceName);
+			CloseServiceHandle(hService);
+			return false;
+		}
+		Sleep(SLEEP_TIME); // Poèkáme pøed dalším dotazem
+	}
 }
 
 bool SCManager::CustomStopService(const std::wstring& serviceName)
@@ -115,7 +163,7 @@ bool SCManager::CustomStopServiceWithWait(const std::wstring& serviceName)
             CloseServiceHandle(hService);
             return false;
         }
-        Sleep(250); // Poèkáme 250 ms pøed dalším dotazem
+        Sleep(SLEEP_TIME); // Poèkáme pøed dalším dotazem
     }
     
 }
@@ -180,7 +228,7 @@ bool SCManager::CustomPauseServiceWithWait(const std::wstring& serviceName)
             CloseServiceHandle(hService);
             return false;
         }
-        Sleep(250); // Poèkáme 250 ms pøed dalším dotazem
+        Sleep(SLEEP_TIME); // Poèkáme pøed dalším dotazem
     }
 }
  

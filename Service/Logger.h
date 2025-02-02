@@ -15,6 +15,7 @@ public:
 	void LogError(const std::wstring& logMessage);
 	void LogWarning(const std::wstring& logMessage);
     void LogTry(const std::wstring& logMessage, const std::string e);
+
 private:
 	std::wstring serviceName;
 	void WriteToEventLog(const std::wstring& logMessage, int eventType);

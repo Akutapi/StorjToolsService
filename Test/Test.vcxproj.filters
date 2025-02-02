@@ -36,5 +36,8 @@
     <ClCompile Include="..\Service\ServiceUpdater.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="..\Service\DiscordManager.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

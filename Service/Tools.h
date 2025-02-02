@@ -11,7 +11,7 @@
 #include "SCManager.h"
 #include "Logger.h"
 #include "ServiceUpdater.h"
-#include <vector>
+#include "DiscordManager.h"
 #include <functional>
 
 class Tools
@@ -21,11 +21,11 @@ public:
     {
 		HANDLE hTimer; // handle na timer
 		bool isRunning; // zda je timer spuštìn
-		int interval; // v hodinách
+		float interval; // v hodinách
 		std::function<void()> callback; // funkce, která se má zavolat
-		std::function<int(const ConfigFileManager&)> getConfigInterval; // funkce pro získání intervalu z konfiguraèního souboru
+		std::function<float(const ConfigFileManager&)> getConfigInterval; // funkce pro získání intervalu z konfiguraèního souboru
 
-		int GetNewInterval(const ConfigFileManager& config) const
+		float GetNewInterval(const ConfigFileManager& config) const
 		{
 			return getConfigInterval(config);
 		}
@@ -40,11 +40,14 @@ public:
 	bool CheckStorjNodeUpdate();
 
 private:
+	DiscordManager discordManager;
+	ConfigFileManager config;
+	void SetDiscordManager();
 	SCManager scManager;
 	ServiceUpdater serviceUpdater;
 	Logger logger;
 	LogReducer logReducer;
-	ConfigFileManager config;
+	
 };
 
 

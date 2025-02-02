@@ -12,9 +12,9 @@ Datum: 15-12-20204
 #include <Windows.h>
 
 #define CONFIG_FILE_NAME L"config.yaml"
-#define CONFIG_VERSION 1
+#define CONFIG_VERSION 2
 
-ConfigFileManager::ConfigFileManager(Logger& _logger) : logger(_logger), configVersion(CONFIG_VERSION), reduceLogTimeInHours(24), maxLogSize(5), reduceLogSize(0.5), checkStorjNodesTimeInHours(1), checkStorjNodeUpdateTimeInHours(12)
+ConfigFileManager::ConfigFileManager(Logger& _logger) : logger(_logger), configVersion(CONFIG_VERSION), reduceLogTimeInHours(24), maxLogSize(5), reduceLogSize(0.5), checkStorjNodesTimeInHours(1), discordUserID("YOUR_USER_ID"), discordBotToken("YOUR_BOT_TOKEN"), checkStorjNodeUpdateTimeInHours(12)
 {
     wchar_t buffer[MAX_PATH];
     GetModuleFileNameW(NULL, buffer, MAX_PATH);
@@ -32,7 +32,7 @@ void ConfigFileManager::UpdateConfig()
     return;
 }
 
-int ConfigFileManager::GetReduceLogTimeInHours() const
+float ConfigFileManager::GetReduceLogTimeInHours() const
 {
     return reduceLogTimeInHours;
 }
@@ -47,12 +47,22 @@ std::uintmax_t ConfigFileManager::GetReduceLogSize() const
     return ConvertGBToBytes(reduceLogSize);
 }
 
-int ConfigFileManager::GetCheckStorjNodesTimeInHours() const
+float ConfigFileManager::GetCheckStorjNodesTimeInHours() const
 {
     return checkStorjNodesTimeInHours;
 }
 
-int ConfigFileManager::GetCheckStorjNodeUpdateTimeInHours() const
+std::string ConfigFileManager::GetDiscordUserID() const
+{
+    return discordUserID;
+}
+
+std::string ConfigFileManager::GetDiscordBotToken() const
+{
+    return discordBotToken;
+}
+
+float ConfigFileManager::GetCheckStorjNodeUpdateTimeInHours() const
 {
     return checkStorjNodeUpdateTimeInHours;
 }
@@ -87,45 +97,63 @@ void ConfigFileManager::ReadConfigFile()
     }
 
     // naètení konfiguraèních hodnot s kontrolou existence klíèù
-    if (config["Reduce Log Time In Hours"])
+    if (config["Reduce Log Interval"])
     {
-        reduceLogTimeInHours = config["Reduce Log Time In Hours"].as<int>();
+        reduceLogTimeInHours = config["Reduce Log Interval"].as<float>();
     }
     else
     {
         logger.LogWarning(L"Config file: reduceLogTimeInHours not found, using default value.");
     }
 
-    if (config["Max Log Size In GB"])
+    if (config["Max Log File Size"])
     {
-        maxLogSize = config["Max Log Size In GB"].as<float>();
+        maxLogSize = config["Max Log File Size"].as<float>();
     }
     else
     {
         logger.LogWarning(L"Config file: maxLogSizeInGB not found, using default value.");
     }
 
-    if (config["Reduce Log Size In GB"])
+    if (config["Reduce Log File to Size"])
     {
-        reduceLogSize = config["Reduce Log Size In GB"].as<float>();
+        reduceLogSize = config["Reduce Log File to Size"].as<float>();
     }
     else
     {
         logger.LogWarning(L"Config file: reduceLogSizeInGB not found, using default value.");
     }
 
-    if (config["Check StrojNodes Time In Hours"])
+    if (config["Check StorjNodes Interval"])
     {
-        checkStorjNodesTimeInHours = config["Check StrojNodes Time In Hours"].as<int>();
+        checkStorjNodesTimeInHours = config["Check StorjNodes Interval"].as<float>();
     }
     else
     {
         logger.LogWarning(L"Config file: checkStrojNodesTimeInHours not found, using default value.");
     }
 
-    if (config["Check StrojNode Update Time In Hours"])
+	if (config["Discord User ID"])
+	{
+		discordUserID = config["Discord User ID"].as<std::string>();
+	}
+	else
+	{
+		logger.LogWarning(L"Config file: discordUserID not found");
+	}
+
+	if (config["Discord Bot Token"])
+	{
+		discordBotToken = config["Discord Bot Token"].as<std::string>();
+	}
+	else
+	{
+		logger.LogWarning(L"Config file: discordBotToken not found");
+	}
+
+    if (config["Update StorjNode Interval"])
     {
-        checkStorjNodeUpdateTimeInHours = config["Check StrojNode Update Time In Hours"].as<int>();
+        checkStorjNodeUpdateTimeInHours = config["Update StorjNode Interval"].as<float>();
     }
     else
     {
@@ -148,21 +176,31 @@ void ConfigFileManager::CreateConfigFile()
         return;
     }
 
-    YAML::Emitter out;
-    out << YAML::Comment("Stroj Tools Service Configuration File");
-    out << YAML::Newline << YAML::Comment("You can disable this feature by setting the timer value to 0.");
-    out << YAML::Newline << YAML::Newline << YAML::Comment("Configuration Version. Do not modify.");
-	out << YAML::BeginMap;
-    out << YAML::Key << "Config Version" << YAML::Value << configVersion;
-    out << YAML::Newline << YAML::Newline << YAML::Comment("Log Maintenance Configuration") << YAML::Newline;
-    out << YAML::Key << "Reduce Log Time In Hours" << YAML::Value << reduceLogTimeInHours;
-    out << YAML::Key << "Max Log Size In GB" << YAML::Value << maxLogSize;
-    out << YAML::Key << "Reduce Log Size In GB" << YAML::Value << reduceLogSize;
-    out << YAML::Newline << YAML::Newline << YAML::Comment("Stroj Nodes Health Check Configuration: Function not supported") << YAML::Newline;
-    out << YAML::Key << "Check StrojNodes Time In Hours" << YAML::Value << checkStorjNodesTimeInHours;
-    out << YAML::Newline << YAML::Newline << YAML::Comment("Stroj Nodes Update Check Configuration: Function not supported") << YAML::Newline;
-    out << YAML::Key << "Check StrojNode Update Time In Hours" << YAML::Value << checkStorjNodeUpdateTimeInHours;
-    out << YAML::EndMap;
-    fout << out.c_str();
-    fout.close();
+    if (fout.is_open())
+    {
+        YAML::Emitter out;
+        out << YAML::Comment("Stroj Tools Service Configuration File");
+        out << YAML::Newline << YAML::Comment("You can disable this feature by setting the timer value to 0.");
+        out << YAML::Newline << YAML::Comment("Intervals are in hours and log file sizes in gigabytes.");
+        out << YAML::Newline << YAML::Newline << YAML::Comment("Configuration Version. Do not modify.");
+        out << YAML::BeginMap;
+        out << YAML::Key << "Config Version" << YAML::Value << CONFIG_VERSION;
+        out << YAML::Newline << YAML::Newline << YAML::Comment("Log Maintenance Configuration") << YAML::Newline;
+        out << YAML::Key << "Reduce Log Interval" << YAML::Value << reduceLogTimeInHours;
+        out << YAML::Key << "Max Log File Size" << YAML::Value << maxLogSize;
+        out << YAML::Key << "Reduce Log File to Size" << YAML::Value << reduceLogSize;
+        out << YAML::Newline << YAML::Newline << YAML::Comment("Storj Nodes Health Check Configuration") << YAML::Newline;
+        out << YAML::Key << "Check StorjNodes Interval" << YAML::Value << checkStorjNodesTimeInHours;
+        out << YAML::Key << "Discord User ID" << YAML::Value << discordUserID;
+        out << YAML::Key << "Discord Bot Token" << YAML::Value << discordBotToken;
+        out << YAML::Newline << YAML::Newline << YAML::Comment("Storj Nodes Update Check Configuration") << YAML::Newline;
+        out << YAML::Key << "Update StorjNode Interval" << YAML::Value << checkStorjNodeUpdateTimeInHours;
+        out << YAML::EndMap;
+        fout << out.c_str();
+        fout.close();
+    }
+    else
+	{
+		logger.LogError(L"Error: Unable to write to the config file.");
+	}
 }

@@ -15,11 +15,13 @@ public:
     ~ConfigFileManager();
 
     void UpdateConfig();
-    int GetReduceLogTimeInHours() const;
+    float GetReduceLogTimeInHours() const;
     std::uintmax_t GetMaxLogSize() const;
     std::uintmax_t GetReduceLogSize() const;
-    int GetCheckStorjNodesTimeInHours() const;
-    int GetCheckStorjNodeUpdateTimeInHours() const;
+    float GetCheckStorjNodesTimeInHours() const;
+    std::string GetDiscordUserID() const;
+    std::string GetDiscordBotToken() const;
+    float GetCheckStorjNodeUpdateTimeInHours() const;
     
 
 private:
@@ -32,9 +34,11 @@ private:
 
     // Konfiguraèní hodnoty
     int configVersion;
-    int reduceLogTimeInHours;
+    float reduceLogTimeInHours;
     float maxLogSize;
     float reduceLogSize;
-    int checkStorjNodesTimeInHours;
-    int checkStorjNodeUpdateTimeInHours;
+    float checkStorjNodesTimeInHours;
+    std::string discordUserID;
+    std::string discordBotToken;
+    float checkStorjNodeUpdateTimeInHours;
 };

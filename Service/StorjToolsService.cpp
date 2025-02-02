@@ -252,6 +252,7 @@ VOID StartTimer(Tools::TimerInfo& timer, int timeOffset)
     if (timer.hTimer == NULL)
     {
         logger.LogError(L"CreateWaitableTimer failed.");
+		return;
     }
 
 	// Posunutí èasu pro jednotlivé èasovaèe, aby se snížila režije pøi spouštìní služby
@@ -259,8 +260,7 @@ VOID StartTimer(Tools::TimerInfo& timer, int timeOffset)
 	// První spuštìní èasovaèe 2 sec + offset * 5min
    	// First timer run 2 sec + offset * 5min
 	liDueTime.QuadPart = -(2 * SECOND_IN_100NS + static_cast<LONGLONG>(timeOffset) * OFFSET_MULTIPLIER * MINUTE_IN_100NS);
-	int interval = HOUR_IN_MILLISECONDS; //interval v hodinách , interval in hours
-
+    LONG interval = 0;
     // Nastavení èasovaèe a bìhu služby
     // Set the timer and run the service
     if (timer.interval == 0)
@@ -270,19 +270,15 @@ VOID StartTimer(Tools::TimerInfo& timer, int timeOffset)
     else
     {
         timer.isRunning = true;
-        interval *= timer.interval;
+        interval = static_cast<LONG>(std::lround(timer.interval * HOUR_IN_MILLISECONDS));
     }
 
-    if (timer.hTimer)
+	// Nastavení èasovaèe
+	// Set the timer
+    if (!SetWaitableTimer(timer.hTimer, &liDueTime,interval, NULL, NULL, FALSE))
     {
-		// Nastavení èasovaèe
-		// Set the timer
-        if (!SetWaitableTimer(timer.hTimer, &liDueTime,interval, NULL, NULL, FALSE))
-        {
-            logger.LogError(L"Error setting waitable timer.");
-        }
+        logger.LogError(L"Error setting waitable timer.");
     }
-
 }
 
 
@@ -299,7 +295,7 @@ VOID CheckAndModifyTimer(Tools::TimerInfo& timer)
 	// Ovìøení, zda byl interval zmìnìn
     // Verify if the interval has changed
 	ConfigFileManager& config = tools.UpdateConfigFromFile();
-	int newInterval = timer.GetNewInterval(config);
+	float newInterval = timer.GetNewInterval(config);
     if (timer.interval == newInterval)
     {
         return;
@@ -312,8 +308,8 @@ VOID CheckAndModifyTimer(Tools::TimerInfo& timer)
     LARGE_INTEGER liDueTime;
 	// První spuštìní po dobì intervalu
 	// First run after the interval time
-    liDueTime.QuadPart = -static_cast<LONGLONG>(timer.interval) * HOUR_IN_100NS; // pøevod hodin na 100-nanosekundové intervaly, convert hours to 100-nanosecond intervals
-    int interval = HOUR_IN_MILLISECONDS; //interval v hodinách, interval in hours
+    liDueTime.QuadPart = -static_cast<LONGLONG>(std::lround(timer.interval * HOUR_IN_100NS)); // pøevod hodin na 100-nanosekundové intervaly, convert hours to 100-nanosecond intervals
+    LONG interval = 0; //interval v hodinách, interval in hours
 
 	// Nastavení èasovaèe a bìhu služby
 	// Set the timer and run the service
@@ -324,7 +320,7 @@ VOID CheckAndModifyTimer(Tools::TimerInfo& timer)
     else
     {
 		timer.isRunning = true;
-		interval *= timer.interval;
+        interval = static_cast<LONG>(std::lround(timer.interval * HOUR_IN_MILLISECONDS));
     }
         
     // Nastavení èasovaèe
@@ -362,11 +358,29 @@ VOID CloseTimers()
 	}
     for (Tools::TimerInfo& timer : timers)
 	{
-        if (timer.hTimer)
+        try
         {
-            CancelWaitableTimer(timer.hTimer);
-			CloseHandle(timer.hTimer);
-			timer.hTimer = NULL;
+            if (timer.hTimer)
+            {
+                if (!CancelWaitableTimer(timer.hTimer))
+                {
+                    logger.LogError(L"Error canceling waitable timer.");
+                }
+
+                if (!CloseHandle(timer.hTimer))
+                {
+                    logger.LogError(L"Error closing waitable timer.");
+                }
+                timer.hTimer = NULL;
+            }
         }
+		catch (const std::exception& e)
+		{
+			logger.LogTry(L"Exception during timer closing: ", e.what());
+		}
+		catch (...)
+		{
+			logger.LogError(L"Unknown exception during timer closing.");
+		}
 	}
 }
