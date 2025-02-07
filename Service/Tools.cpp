@@ -7,6 +7,7 @@
 #include "Tools.h"
 #include <format>
 #include <iostream>
+#include <algorithm>
 
 // Konstanty
 #define SERVICE_NAME L"storagenode"
@@ -295,50 +296,63 @@ bool Tools::CheckStorjNodeUpdate()
 		return false;
 	}
 
-	std::vector<std::wstring> failedStartServices;
-	// Update Storj Node
-	bool result = true;
+	// Naplni vektor služb, které je tøeba aktualizovat
+	std::vector<ServiceStatus> servicesToUpdate;
 	for (auto& service : allServices)
 	{
 		std::wstring servicePath = scManager.GetServicePathByName(service);
 		if (serviceUpdater.NeedUpdate(sourceServicePath, servicePath))
 		{
-			// Stop service
-			scManager.CustomStopServiceWithWait(service);
-			// Update service
-			if (!serviceUpdater.UpdateService(sourceServicePath, servicePath))
-			{
-				logger.LogError(std::format(L"Service update failed: {}", service));
-				result = false;
-			}
-			// Start service
-			if (!scManager.CustomStartServiceWithWait(service))
-			{
-				logger.LogWarning(std::format(L"Service start failed: {}", service));
-				failedStartServices.push_back(service);
-			}
+			servicesToUpdate.push_back({ service, NO_STOPED });
 		}
 	}
 
-	int serviceStartCount = 3;
-	while (!failedStartServices.empty() && serviceStartCount > 0)
+
+	// Update Storj Node
+
+	int serviceUpdateCount = 5;
+	while( needsUpdate(servicesToUpdate) && serviceUpdateCount > 0)
 	{
-		std::vector<std::wstring> failedServices;
-		for (auto& service : failedStartServices)
+		for (auto& service : servicesToUpdate)
 		{
-			if (!scManager.CustomStartServiceWithWait(service))
-			{
-				logger.LogWarning(std::format(L"Service start failed: {}", service));
-				failedServices.push_back(service);
-			}
-		}
-		failedStartServices = failedServices;
-		serviceStartCount--;
-	}
+			std::wstring servicePath = scManager.GetServicePathByName(service.serviceName);
 
-	if (failedStartServices.empty())
-	{
-		logger.LogInfo(L"All service started.");
+			// Stop service
+			if (service.status == NO_STOPED)
+			{
+				if (!scManager.CustomStopServiceWithWait(service.serviceName))
+				{
+					logger.LogWarning(std::format(L"Service stop failed: {}", service.serviceName));
+					continue;
+				}
+				service.status = NO_UPDATED;
+			}
+
+			// Update service
+			if (service.status == NO_UPDATED)
+			{
+				if (!serviceUpdater.UpdateService(sourceServicePath, servicePath))
+				{
+					logger.LogError(std::format(L"Service update failed: {}", service.serviceName));
+					continue;
+				}
+				service.status = NO_STARTED;
+			}
+
+			// Start service
+			if (service.status == NO_STARTED)
+			{
+				if (!scManager.CustomStartServiceWithWait(service.serviceName))
+				{
+					logger.LogWarning(std::format(L"Service start failed: {}", service.serviceName));
+					continue;
+				}
+				service.status = DONE;
+			}
+
+		}
+		Sleep(250); // Poèkáme pøed dalším pokusem
+		serviceUpdateCount--;
 	}
 
 	// Delete shadow copy
@@ -348,7 +362,7 @@ bool Tools::CheckStorjNodeUpdate()
 		return false;
 	}
 
-	if (!result)
+	if (needsUpdate(servicesToUpdate))
 	{
 		logger.LogError(L"Service update failed.");
 		return false;
@@ -356,6 +370,11 @@ bool Tools::CheckStorjNodeUpdate()
 
 	logger.LogInfo(L"Check and update completed.");
 	return true;
+}
+
+bool Tools::needsUpdate(const std::vector<ServiceStatus>& servicesToUpdate)
+{
+	return std::any_of(servicesToUpdate.begin(), servicesToUpdate.end(), [](const ServiceStatus& service) { return service.status != DONE; });
 }
 
 void Tools::SetDiscordManager()

@@ -52,7 +52,8 @@ bool ServiceUpdater::DeleteShadowCopy(const std::wstring& sourceFilePath)
 // Aktualizuje službu
 bool ServiceUpdater::UpdateService(const std::wstring& sourceFilePath, const std::wstring& fileToUpdatePath)
 {
-	if (!std::filesystem::copy_file(sourceFilePath, fileToUpdatePath, std::filesystem::copy_options::overwrite_existing))
+	std::wstring shadowFilePath = GetShadowFilePath(sourceFilePath);
+	if (!std::filesystem::copy_file(shadowFilePath, fileToUpdatePath, std::filesystem::copy_options::overwrite_existing))
 	{
 		logger.LogError(L"Error while updating file");
 		return false;

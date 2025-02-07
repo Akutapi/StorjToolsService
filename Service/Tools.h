@@ -40,6 +40,17 @@ public:
 	bool CheckStorjNodeUpdate();
 
 private:
+	// struktura služby a jeho stavu updatu
+	// enum status pokroku updatu
+
+	enum UPDATE_STATUS { NO_STOPED, NO_UPDATED, NO_STARTED, DONE };
+	struct ServiceStatus
+	{
+		std::wstring serviceName;
+		UPDATE_STATUS status;
+	};
+	bool needsUpdate(const std::vector<ServiceStatus>& servicesToUpdate);
+
 	DiscordManager discordManager;
 	ConfigFileManager config;
 	void SetDiscordManager();
