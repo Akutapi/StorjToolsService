@@ -40,17 +40,36 @@ public:
 	bool CheckStorjNodeUpdate();
 
 private:
+	// enum pro množinu služeb
+	enum SERVICE_SET { ALL, ALL_TO_MAINTENANCE, ALL_TO_CHECK, ALL_TO_UPDATE, UPDATERS};
+	std::vector<std::wstring> GetServices(const SERVICE_SET);
+
 	// struktura služby a jeho stavu updatu
 	// enum status pokroku updatu
-
-	enum UPDATE_STATUS { NO_STOPED, NO_UPDATED, NO_STARTED, DONE };
+	enum UPDATE_STATUS { RUNNING_OLD, STOPED_OLD, STOPED_UPDATED, RUNNING_UPDATED };
 	struct ServiceStatus
 	{
 		std::wstring serviceName;
 		UPDATE_STATUS status;
 	};
-	bool needsUpdate(const std::vector<ServiceStatus>& servicesToUpdate);
 
+	// struktura služby a jeho stavu údržby
+	// enum pro stav údržby
+	enum MAINTENANCE_STATUS { INIT, TEMPLATED, STOPPED, REPLACED, STARTED };
+	struct MaintenanceStatus
+	{
+		std::wstring serviceName;
+		MAINTENANCE_STATUS status;
+	};
+	bool needsUpdate(const std::vector<ServiceStatus>& services) const;
+	bool needsStart(const std::vector<ServiceStatus>& services) const;
+	bool needsMaintenance(const std::vector<MaintenanceStatus>& services) const;
+	std::vector<ServiceStatus> SetServiceStatusForCheck(const std::vector<std::wstring> services);
+	std::vector<ServiceStatus> SetServiceStatusForUpdate(const std::vector<std::wstring> services);
+	std::wstring StatusServiceToString(const UPDATE_STATUS status);
+	std::wstring StatusServiceToString(const MAINTENANCE_STATUS status);
+	std::vector<MaintenanceStatus> SetServiceStatusForMaintenance(const std::vector<std::wstring> services);
+	std::wstring GetSorceServicePath(const std::vector<std::wstring>& updaterServices);
 	DiscordManager discordManager;
 	ConfigFileManager config;
 	void SetDiscordManager();
