@@ -1,8 +1,7 @@
 <WixLocalization xmlns="http://wixtoolset.org/schemas/v4/wxl" Culture="cs-CZ">
 
   <String Id="DowngradeError" Value="Novější verze [ProductName] je již nainstalována." />
-  <String Id="UpgradeError" Value="Odinstalujte předchozí verzi programu." />
   <String Id="Eula" Value="cs-CZ\Eula.rtf" />
-  <String Id="ServiceDescription" Value="Storj Tools Service je služba pro údržbu na serverech s decentralizovaným úložištěm Storj. Podporuje více uzlů na jednom serveru, čímž zajišťuje efektivní správu a provoz. v 0.1.3.5" />
+  <String Id="ServiceDescription" Value="Storj Tools Service je služba pro údržbu na serverech s decentralizovaným úložištěm Storj. Podporuje více uzlů na jednom serveru, čímž zajišťuje efektivní správu a provoz." />
 
 </WixLocalization>

@@ -13,10 +13,34 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
     <ClCompile Include="DataAdapter.cpp" />
+    <ClCompile Include="..\Service\ConfigFileManager.cpp">
+      <Filter>srcCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Service\DiscordManager.cpp">
+      <Filter>srcCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Service\SCManager.cpp">
+      <Filter>srcCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Service\Logger.cpp">
+      <Filter>srcCPP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
     <ClInclude Include="DataAdapter.h" />
+    <ClInclude Include="..\Service\ConfigFileManager.h">
+      <Filter>srcH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Service\DiscordManager.h">
+      <Filter>srcH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Service\SCManager.h">
+      <Filter>srcH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Service\Logger.h">
+      <Filter>srcH</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\Wide310x150Logo.scale-200.png">
@@ -44,6 +68,12 @@
   <ItemGroup>
     <Filter Include="Assets">
       <UniqueIdentifier>{67c7d060-56a0-4f5d-86fb-3a2ed1161352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="srcCPP">
+      <UniqueIdentifier>{68b3e0c0-5258-450d-8d33-64555f711778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="srcH">
+      <UniqueIdentifier>{1e8cfabc-18a8-4ac4-bc75-94b0ae405727}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

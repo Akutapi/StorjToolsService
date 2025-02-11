@@ -10,8 +10,8 @@ int main() {
 	std::wcout << "-----------------Test-------------" << std::endl;
 	//inicializace loggeru
 	Logger logger(const_cast<LPWSTR>(L"Test"));
-	//Tools tools(logger);
-	//tools.CheckStorjNodeUpdate();
+	Tools tools(logger);
+	tools.CheckStorjNodeUpdate();
 	std::wcout << "Tests Done" << std::endl;
 	std::cin.get();
     return 0;

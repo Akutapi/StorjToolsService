@@ -60,7 +60,7 @@ void Logger::WriteToEventLog(const std::wstring& logMessage, int eventType)
 	{
 		lpszStrings[0] = serviceName.c_str();
 		lpszStrings[1] = logMessage.c_str();
-		ReportEvent(hEventSource, eventType, 0, 0, NULL, 2, 0, lpszStrings, NULL);
+		ReportEvent(hEventSource, static_cast<WORD>(eventType), 0, 0, NULL, 2, 0, lpszStrings, NULL);
 		DeregisterEventSource(hEventSource);
 	}
 }

@@ -4,7 +4,6 @@ This file contains the declaration of all the localizable strings.
 <WixLocalization xmlns="http://wixtoolset.org/schemas/v4/wxl" Culture="en-US">
 
   <String Id="DowngradeError" Value="A newer version of [ProductName] is already installed." />
-  <String Id="UpgradeError" Value="Uninstall the previous version of the program." />
   <String Id="Eula" Value="en-US\Eula.rtf" />
   <String Id="ServiceDescription" Value="Storj Tools Service is a Windows service designed for maintenance tasks on servers with decentralized Storj storage. It supports multiple nodes on a single server, ensuring efficient management and operation." />
   
