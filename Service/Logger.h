@@ -19,7 +19,8 @@ public:
 private:
 	std::wstring serviceName;
 	void WriteToEventLog(const std::wstring& logMessage, int eventType);
-	void WriteLogToConsole(const std::wstring& logMessage, int eventType);
+	void WriteLogToConsole(const std::wstring& logMessage);
+	void WriteLogToDebug(const std::wstring& logMessage);
 	void WriteLog(const std::wstring& logMessage, int eventType);
 };
 

@@ -1,0 +1,14 @@
+namespace Storj_Tools
+{
+    [default_interface]
+    runtimeclass Node 
+    {
+        Node();
+        String Name;
+        String Path;
+        String Status;
+        String SVersion;
+        String StatusIcon;
+        UInt32 StatusColor;
+    }
+}

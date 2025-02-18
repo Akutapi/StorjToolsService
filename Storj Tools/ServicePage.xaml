@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Storj_Tools.ServicePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Storj_Tools"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+
+        <!-- Nadpis -->
+        <TextBlock Text="Service Settings" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+        <!-- Interval aktualizace nodů -->
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <TextBlock Text="Update interval for nodes (hours)" FontSize="14"/>
+            <NumberBox x:Name="updateIntervalBox" Minimum="1" Width="150"/>
+        </StackPanel>
+
+        <!-- Interval kontroly nodů -->
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <TextBlock Text="Health check interval for nodes (hours)" FontSize="14"/>
+            <NumberBox x:Name="healthCheckIntervalBox" Minimum="1" Width="150"/>
+        </StackPanel>
+
+        <!-- Interval údržby logů -->
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <TextBlock Text="Log maintenance interval (hours)" FontSize="14"/>
+            <NumberBox x:Name="logMaintenanceIntervalBox" Minimum="1" Width="150"/>
+        </StackPanel>
+
+        <!-- Maximální velikost logu -->
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <TextBlock Text="Max log file size before reduction (GB)" FontSize="14"/>
+            <NumberBox x:Name="maxLogSizeBox" Minimum="0.1" Width="150"/>
+        </StackPanel>
+
+        <!-- Redukovaná velikost logu -->
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <TextBlock Text="Reduced log file size (GB)" FontSize="14"/>
+            <NumberBox x:Name="reducedLogSizeBox" Minimum="0.1" Width="150"/>
+        </StackPanel>
+
+        <!-- Tlačítko Save -->
+        <Button x:Name="saveButton" Content="💾 Save Settings" Click="SaveSettings_Click" HorizontalAlignment="Center"/>
+
+    </StackPanel>
+</Page>

@@ -420,7 +420,7 @@ std::vector<Tools::ServiceStatus> Tools::SetServiceStatusForCheck(const std::vec
 		}
 	}
 
-	return std::move(servicesToCheck);
+	return servicesToCheck;
 }
 
 std::vector<Tools::ServiceStatus> Tools::SetServiceStatusForUpdate(const std::vector<std::wstring> services)
@@ -444,7 +444,7 @@ std::vector<Tools::ServiceStatus> Tools::SetServiceStatusForUpdate(const std::ve
 		}
 	}
 
-	return std::move(servicesToUpdate);
+	return servicesToUpdate;
 }
 
 std::wstring Tools::StatusServiceToString(const UPDATE_STATUS status)
@@ -479,7 +479,7 @@ std::vector<Tools::MaintenanceStatus> Tools::SetServiceStatusForMaintenance(cons
 	{
 		servicesToMaintenance.push_back({ service, INIT });
 	}
-	return std::move(servicesToMaintenance);
+	return servicesToMaintenance;
 }
 
 std::wstring Tools::GetSorceServicePath(const std::vector<std::wstring>& updaterServices)
@@ -512,7 +512,7 @@ std::wstring Tools::GetSorceServicePath(const std::vector<std::wstring>& updater
 			sourceServicePath = servicePath;
 		}
 	}
-	return std::move(sourceServicePath);
+	return sourceServicePath;
 }
 
 void Tools::SetDiscordManager()

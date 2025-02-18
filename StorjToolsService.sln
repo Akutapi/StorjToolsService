@@ -21,7 +21,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj",
 		{55ACCC66-CC65-446A-A41A-E904C3542A3B} = {55ACCC66-CC65-446A-A41A-E904C3542A3B}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stroj Tools", "Stroj Tools\Stroj Tools.vcxproj", "{67C7D060-56A0-4F5D-86FB-3A2ED1161352}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Storj Tools", "Storj Tools\Storj Tools.vcxproj", "{67C7D060-56A0-4F5D-86FB-3A2ED1161352}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

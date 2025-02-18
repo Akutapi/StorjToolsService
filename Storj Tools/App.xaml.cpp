@@ -8,7 +8,7 @@ using namespace Microsoft::UI::Xaml;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace winrt::Stroj_Tools::implementation
+namespace winrt::Storj_Tools::implementation
 {
     /// <summary>
     /// Initializes the singleton application object.  This is the first line of authored code
@@ -16,9 +16,6 @@ namespace winrt::Stroj_Tools::implementation
     /// </summary>
     App::App()
     {
-        // Xaml objects should not call InitializeComponent during construction.
-        // See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
-
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
         UnhandledException([](IInspectable const&, UnhandledExceptionEventArgs const& e)
         {

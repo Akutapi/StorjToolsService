@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Storj_Tools.DiscordPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Storj_Tools"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+
+        <!-- Nadpis -->
+        <TextBlock Text="Bot Configuration" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+
+        <!-- Uživatelské ID -->
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <TextBlock Text="Enter your User ID (Numeric)" FontSize="14"/>
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <NumberBox x:Name="userIdNumberBox" Minimum="1" Width="150"/>
+                <Button Content="📋 Paste" Click="PasteUserId_Click"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Token bota -->
+        <StackPanel Orientation="Vertical" Spacing="5">
+            <TextBlock Text="Enter your Bot Token (Keep it secure!)" FontSize="14"/>
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <PasswordBox x:Name="botTokenBox" Width="300" PlaceholderText="Enter bot token"/>
+                <Button Content="📋 Paste" Click="PasteBotToken_Click"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Akce -->
+        <StackPanel Orientation="Horizontal" Spacing="10">
+            <Button x:Name="sendTestMessageButton" Content="📩 Send Test Message" Click="SendTestMessage_Click"/>
+            <Button x:Name="saveButton" Content="💾 Save Settings" Click="SaveSettings_Click"/>
+        </StackPanel>
+
+    </StackPanel>
+</Page>

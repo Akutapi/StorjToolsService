@@ -1,8 +1,7 @@
 #pragma once
-
 #include "App.xaml.g.h"
 
-namespace winrt::Stroj_Tools::implementation
+namespace winrt::Storj_Tools::implementation
 {
     struct App : AppT<App>
     {

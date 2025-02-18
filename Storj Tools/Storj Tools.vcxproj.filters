@@ -5,14 +5,18 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="MainWindow.xaml" />
+    <Page Include="NodesPage.xaml" />
+    <Page Include="ServicePage.xaml" />
+    <Page Include="DiscordPage.xaml" />
+    <Page Include="SettingPage.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
+    <Midl Include="Node.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="$(GeneratedFilesDir)module.g.cpp" />
-    <ClCompile Include="DataAdapter.cpp" />
     <ClCompile Include="..\Service\ConfigFileManager.cpp">
       <Filter>srcCPP</Filter>
     </ClCompile>
@@ -25,10 +29,15 @@
     <ClCompile Include="..\Service\Logger.cpp">
       <Filter>srcCPP</Filter>
     </ClCompile>
+    <ClCompile Include="..\Service\ServiceUpdater.cpp">
+      <Filter>srcCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="DataAdapter.cpp">
+      <Filter>srcCPP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
-    <ClInclude Include="DataAdapter.h" />
     <ClInclude Include="..\Service\ConfigFileManager.h">
       <Filter>srcH</Filter>
     </ClInclude>
@@ -39,6 +48,12 @@
       <Filter>srcH</Filter>
     </ClInclude>
     <ClInclude Include="..\Service\Logger.h">
+      <Filter>srcH</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Service\ServiceUpdater.h">
+      <Filter>srcH</Filter>
+    </ClInclude>
+    <ClInclude Include="DataAdapter.h">
       <Filter>srcH</Filter>
     </ClInclude>
   </ItemGroup>
@@ -75,9 +90,6 @@
     <Filter Include="srcH">
       <UniqueIdentifier>{1e8cfabc-18a8-4ac4-bc75-94b0ae405727}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />

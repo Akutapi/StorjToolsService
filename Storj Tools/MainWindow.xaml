@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Storj_Tools.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Storj_Tools"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Storj Tools">
+
+    <NavigationView x:Name="NavView" IsSettingsVisible="True" PaneDisplayMode="Left" SelectionChanged="NavView_SelectionChanged">
+        <!-- Boční menu -->
+        <NavigationView.MenuItems>
+            <NavigationViewItem Content="Nodes" Icon="Home" Tag="NodesPage" />
+            <NavigationViewItem Content="Service setting" Icon="MapDrive" Tag="ServicePage" />
+            <NavigationViewItem Content="Discord setting" Icon="Contact" Tag="DiscordPage" />
+        </NavigationView.MenuItems>
+
+        <!-- Hlavní obsah -->
+        <NavigationView.Content>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Horní pevná část -->
+                <StackPanel Orientation="Horizontal" Padding="10">
+                    <TextBlock Text="{ x:Bind Test}" VerticalAlignment="Center" />
+                    <Button Content="Akce" Click="BTN_RestartService" Margin="10,0,0,0" />
+                </StackPanel>
+
+                <!-- Prostor pro stránky -->
+                <Frame x:Name="ContentFrame" Grid.Row="1" />
+            </Grid>
+        </NavigationView.Content>
+    </NavigationView>
+</Window>

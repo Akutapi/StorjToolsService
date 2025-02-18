@@ -9,9 +9,8 @@ int main() {
 	std::locale::global(std::locale("cs_CZ.UTF-8"));
 	std::wcout << "-----------------Test-------------" << std::endl;
 	//inicializace loggeru
-	Logger logger(const_cast<LPWSTR>(L"Test"));
-	Tools tools(logger);
-	tools.CheckStorjNodeUpdate();
+	Logger logger(L"Debug");
+	logger.LogInfo(L"Testovací zpráva");
 	std::wcout << "Tests Done" << std::endl;
 	std::cin.get();
     return 0;

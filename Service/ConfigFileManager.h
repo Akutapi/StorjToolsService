@@ -15,13 +15,21 @@ public:
     ~ConfigFileManager();
 
     void UpdateConfig();
+	void SaveConfig();
     float GetReduceLogTimeInHours() const;
+	void SetReduceLogTimeInHours(float hours);
     std::uintmax_t GetMaxLogSize() const;
+	void SetMaxLogSize(float size);
     std::uintmax_t GetReduceLogSize() const;
+	void SetReduceLogSize(float size);
     float GetCheckStorjNodesTimeInHours() const;
+	void SetCheckStorjNodesTimeInHours(float hours);
     std::string GetDiscordUserID() const;
+	void SetDiscordUserID(const std::string& userID);
     std::string GetDiscordBotToken() const;
+	void SetDiscordBotToken(const std::string& botToken);
     float GetCheckStorjNodeUpdateTimeInHours() const;
+	void SetCheckStorjNodeUpdateTimeInHours(float hours);
     
 
 private:

@@ -65,8 +65,24 @@ void Logger::WriteToEventLog(const std::wstring& logMessage, int eventType)
 	}
 }
 
-void Logger::WriteLogToConsole(const std::wstring& logMessage, int eventType)
+void Logger::WriteLogToConsole(const std::wstring& logMessage)
 {
+	std::wcout << logMessage << std::endl;
+}
+
+void Logger::WriteLogToDebug(const std::wstring& logMessage)
+{
+	std::wcout <<L"pokus poslat debug zprávu";
+	OutputDebugString(logMessage.c_str());
+}
+
+void Logger::WriteLog(const std::wstring& logMessage, int eventType)
+{
+	if (serviceName != L"Test" && serviceName != L"Debug")
+	{
+		WriteToEventLog(logMessage, eventType);
+		return;
+	}
 	// Výpis do konzole pro testování
 	std::wstring event;
 	switch (eventType)
@@ -84,16 +100,8 @@ void Logger::WriteLogToConsole(const std::wstring& logMessage, int eventType)
 		event = L"UNKNOWN: ";
 		break;
 	}
-	std::wcout << event << logMessage << std::endl;
-}
 
-void Logger::WriteLog(const std::wstring& logMessage, int eventType)
-{
-	if (serviceName != L"Test")
-	{
-		WriteToEventLog(logMessage, eventType);
-		return;
-	}
-	WriteLogToConsole(logMessage, eventType);
+	std::wstring msg = event + logMessage;
+	(serviceName == L"Debug") ? WriteLogToDebug(msg) : WriteLogToConsole(msg);
 }
 

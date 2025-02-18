@@ -1,0 +1,8 @@
+namespace Storj_Tools
+{
+    [default_interface]
+    runtimeclass ServicePage : Microsoft.UI.Xaml.Controls.Page
+    {
+        ServicePage();
+    }
+}

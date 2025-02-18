@@ -32,9 +32,20 @@ void ConfigFileManager::UpdateConfig()
     return;
 }
 
+void ConfigFileManager::SaveConfig()
+{
+	CreateConfigFile();
+	return;
+}
+
 float ConfigFileManager::GetReduceLogTimeInHours() const
 {
     return reduceLogTimeInHours;
+}
+
+void ConfigFileManager::SetReduceLogTimeInHours(float hours)
+{
+	reduceLogSize = hours;
 }
 
 std::uintmax_t ConfigFileManager::GetMaxLogSize() const
@@ -42,9 +53,19 @@ std::uintmax_t ConfigFileManager::GetMaxLogSize() const
     return ConvertGBToBytes(maxLogSize);
 }
 
+void ConfigFileManager::SetMaxLogSize(float size)
+{
+	maxLogSize = size;
+}
+
 std::uintmax_t ConfigFileManager::GetReduceLogSize() const
 {
     return ConvertGBToBytes(reduceLogSize);
+}
+
+void ConfigFileManager::SetReduceLogSize(float size)
+{
+	reduceLogSize = size;
 }
 
 float ConfigFileManager::GetCheckStorjNodesTimeInHours() const
@@ -52,9 +73,19 @@ float ConfigFileManager::GetCheckStorjNodesTimeInHours() const
     return checkStorjNodesTimeInHours;
 }
 
+void ConfigFileManager::SetCheckStorjNodesTimeInHours(float hours)
+{
+	checkStorjNodesTimeInHours = hours;
+}
+
 std::string ConfigFileManager::GetDiscordUserID() const
 {
     return discordUserID;
+}
+
+void ConfigFileManager::SetDiscordUserID(const std::string& userID)
+{
+	discordUserID = userID;
 }
 
 std::string ConfigFileManager::GetDiscordBotToken() const
@@ -62,9 +93,19 @@ std::string ConfigFileManager::GetDiscordBotToken() const
     return discordBotToken;
 }
 
+void ConfigFileManager::SetDiscordBotToken(const std::string& botToken)
+{
+	discordBotToken = botToken;
+}
+
 float ConfigFileManager::GetCheckStorjNodeUpdateTimeInHours() const
 {
     return checkStorjNodeUpdateTimeInHours;
+}
+
+void ConfigFileManager::SetCheckStorjNodeUpdateTimeInHours(float hours)
+{
+	checkStorjNodeUpdateTimeInHours = hours;
 }
 
 void ConfigFileManager::ReadConfigFile()

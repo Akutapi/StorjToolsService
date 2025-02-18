@@ -1,9 +1,9 @@
-namespace Stroj_Tools
+namespace Storj_Tools
 {
     [default_interface]
     runtimeclass MainWindow : Microsoft.UI.Xaml.Window
     {
         MainWindow();
-        Int32 MyProperty;
+        String Test;
     }
 }
