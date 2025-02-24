@@ -523,5 +523,7 @@ void Tools::SetDiscordManager()
 	if (!discordManager.SetDiscordBot(config.GetDiscordBotToken(), config.GetDiscordUserID()))
 	{
 		logger.LogError(L"Error creating Discord bot.");
+		return;
 	}
+	discordManager.sendDM(L"The Storj service has started.");
 }

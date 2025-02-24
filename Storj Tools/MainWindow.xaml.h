@@ -1,7 +1,7 @@
 #pragma once
 #include "MainWindow.g.h"
 #include "App.xaml.h"
-#include "DataAdapter.h"
+#include "StorjData.h"
 namespace winrt::Storj_Tools::implementation
 {
     struct MainWindow : MainWindowT<MainWindow>
@@ -10,13 +10,11 @@ namespace winrt::Storj_Tools::implementation
         MainWindow();
 
 		void NavView_SelectionChanged(winrt::Microsoft::UI::Xaml::Controls::NavigationView const& sender, winrt::Microsoft::UI::Xaml::Controls::NavigationViewSelectionChangedEventArgs const& args);
-        
-        hstring Test();
-		void Test(hstring const& value);
 
-		void BTN_RestartService(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args);
+		Storj_Tools::StorjData StorjData();
+
 	private:
-		DataAdapter& data = DataAdapter::Instance();
+		Storj_Tools::StorjData storjData;
     };
 }
 

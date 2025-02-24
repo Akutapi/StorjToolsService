@@ -16,11 +16,34 @@ public:
 	DataAdapter& operator=(const DataAdapter&) = delete;
 
 	// Získání instance tøídy
-	static DataAdapter& Instance(){	static DataAdapter instance;return instance;}
+	static DataAdapter& Instance(){	static DataAdapter instance; return instance;}
 	void Init();
 
-	std::wstring GetTest();
-	void SetTest(std::wstring text);
+	// ServisStatus
+	std::wstring GetServiceStatus();
+	void RestartService();
+
+	// Nastavení z konfiguraèního souboru
+	float GetNodesUpdateInterval();
+	void SetNodesUpdateInterval(float hours);
+	float GetCheckNodesInterval();
+	void SetCheckNodesInterval(float hours);
+	float GetLogReductionInterval();
+	void SetLogReductionInterval(float hours);
+	float GetMaxLogSize();
+	void SetMaxLogSize(float size);
+	float GetLogReducedSize();
+	void SetLogReducedSize(float size);
+	std::string GetDiscordUserID();
+	void SetDiscordUserID(const std::string& userID);
+	std::string GetDiscordBotToken();
+	void SetDiscordBotToken(const std::string& botToken);
+	void SaveSettings();
+	void LoadSettings();
+
+	// Discord
+	void SendTestMessageToDiscord();
+
 
 private:
 	DataAdapter();
@@ -32,6 +55,6 @@ private:
 	SCManager scManager;
 	ServiceUpdater serviceUpdater;	
 
-	std::wstring test;
+	std::wstring serviceStatus = L"svefwef";
 };
 

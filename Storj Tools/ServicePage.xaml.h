@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ServicePage.g.h"
+#include "StorjData.h"
 
 namespace winrt::Storj_Tools::implementation
 {
@@ -13,6 +14,11 @@ namespace winrt::Storj_Tools::implementation
         }
 
 		void SaveSettings_Click(Windows::Foundation::IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& args);
+
+        Storj_Tools::StorjData StorjData();
+
+    private:
+        Storj_Tools::StorjData storjData;
     };
 }
 

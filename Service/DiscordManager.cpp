@@ -123,12 +123,7 @@ bool DiscordManager::SetDiscordBot(std::string _token, std::string _userID)
 	// Uvolnìní hlavièek
 	curl_slist_free_all(headers);
 	headers = nullptr;
-	if (firstSet)
-	{
-		firstSet = false;
-		logger.LogInfo(L"Discord bot byl úspìšnì nastaven.");
-		sendDM(L"The Storj service has started.");
-	}
+	logger.LogInfo(L"Discord bot byl úspìšnì nastaven.");
 	return true;
 }
 

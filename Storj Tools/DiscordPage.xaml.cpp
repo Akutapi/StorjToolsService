@@ -3,6 +3,8 @@
 #if __has_include("DiscordPage.g.cpp")
 #include "DiscordPage.g.cpp"
 #endif
+#include <winrt/Windows.ApplicationModel.DataTransfer.h>
+
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -12,21 +14,37 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::Storj_Tools::implementation
 {
-	void DiscordPage::PasteUserId_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+	winrt::Windows::Foundation::IAsyncAction DiscordPage::PasteUserId_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
 	{
-		throw hresult_not_implemented();
+		hstring clipboardText = co_await GetClipboardText();
+		if (!clipboardText.empty())
+		{
+			storjData.UserID(clipboardText);
+		}
+		co_return;
 	}
-	void DiscordPage::PasteBotToken_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+	winrt::Windows::Foundation::IAsyncAction DiscordPage::PasteBotToken_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
 	{
-		throw hresult_not_implemented();
-	}
-	void DiscordPage::SaveSettings_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
-	{
-		throw hresult_not_implemented();
+		hstring clipboardText = co_await GetClipboardText();
+		if (!clipboardText.empty())
+		{
+			storjData.BotToken(clipboardText);
+		}
+		co_return;
 	}
 
-	void DiscordPage::SendTestMessage_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+	Storj_Tools::StorjData DiscordPage::StorjData()
 	{
-		throw hresult_not_implemented();
+		return storjData;
 	}
+
+    winrt::Windows::Foundation::IAsyncOperation<winrt::hstring> DiscordPage::GetClipboardText()
+    {
+        auto dataPackageView = winrt::Windows::ApplicationModel::DataTransfer::Clipboard::GetContent();
+        if (dataPackageView.Contains(winrt::Windows::ApplicationModel::DataTransfer::StandardDataFormats::Text()))
+        {
+            co_return co_await dataPackageView.GetTextAsync();
+        }
+        co_return L"";
+    }
 }

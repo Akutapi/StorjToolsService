@@ -53,9 +53,19 @@ std::uintmax_t ConfigFileManager::GetMaxLogSize() const
     return ConvertGBToBytes(maxLogSize);
 }
 
+float ConfigFileManager::GetMaxLogSizeAsFLoat() const
+{
+	return maxLogSize;
+}
+
 void ConfigFileManager::SetMaxLogSize(float size)
 {
 	maxLogSize = size;
+}
+
+float ConfigFileManager::GetReduceLogSizeAsFloat() const
+{
+	return reduceLogSize;
 }
 
 std::uintmax_t ConfigFileManager::GetReduceLogSize() const

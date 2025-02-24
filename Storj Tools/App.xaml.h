@@ -1,5 +1,6 @@
 #pragma once
 #include "App.xaml.g.h"
+#include "StorjData.h"
 
 namespace winrt::Storj_Tools::implementation
 {

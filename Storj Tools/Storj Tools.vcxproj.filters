@@ -9,10 +9,12 @@
     <Page Include="ServicePage.xaml" />
     <Page Include="DiscordPage.xaml" />
     <Page Include="SettingPage.xaml" />
+    <Page Include="Themes\Generic.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Midl Include="MainWindow.idl" />
     <Midl Include="Node.idl" />
+    <Midl Include="StorjData.idl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />

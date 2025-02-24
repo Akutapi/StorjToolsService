@@ -46,17 +46,8 @@ namespace winrt::Storj_Tools::implementation
 		}
     }
 
-	hstring MainWindow::Test()
-	{
-		return hstring(data.GetTest());
-	}
-
-	void MainWindow::Test(hstring const& value)
-	{
-		data.SetTest(value.c_str());
-	}
-    void MainWindow::BTN_RestartService([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+    Storj_Tools::StorjData MainWindow::StorjData()
     {
-		data.SetTest(L"Click");
+        return storjData;
     }
 }

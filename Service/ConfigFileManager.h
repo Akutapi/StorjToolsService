@@ -19,7 +19,9 @@ public:
     float GetReduceLogTimeInHours() const;
 	void SetReduceLogTimeInHours(float hours);
     std::uintmax_t GetMaxLogSize() const;
+	float GetMaxLogSizeAsFLoat() const;
 	void SetMaxLogSize(float size);
+	float GetReduceLogSizeAsFloat() const;
     std::uintmax_t GetReduceLogSize() const;
 	void SetReduceLogSize(float size);
     float GetCheckStorjNodesTimeInHours() const;

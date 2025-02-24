@@ -17,7 +17,7 @@
         <StackPanel Orientation="Vertical" Spacing="5">
             <TextBlock Text="Enter your User ID (Numeric)" FontSize="14"/>
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <NumberBox x:Name="userIdNumberBox" Minimum="1" Width="150"/>
+                <TextBox x:Name="userIdNumberBox" Width="200"  Text="{ x:Bind StorjData.UserID, Mode=TwoWay }"/>
                 <Button Content="📋 Paste" Click="PasteUserId_Click"/>
             </StackPanel>
         </StackPanel>
@@ -26,15 +26,15 @@
         <StackPanel Orientation="Vertical" Spacing="5">
             <TextBlock Text="Enter your Bot Token (Keep it secure!)" FontSize="14"/>
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <PasswordBox x:Name="botTokenBox" Width="300" PlaceholderText="Enter bot token"/>
+                <TextBox x:Name="botTokenBox" Width="620" Text="{ x:Bind StorjData.BotToken, Mode=TwoWay }"/>
                 <Button Content="📋 Paste" Click="PasteBotToken_Click"/>
             </StackPanel>
         </StackPanel>
 
         <!-- Akce -->
         <StackPanel Orientation="Horizontal" Spacing="10">
-            <Button x:Name="sendTestMessageButton" Content="📩 Send Test Message" Click="SendTestMessage_Click"/>
-            <Button x:Name="saveButton" Content="💾 Save Settings" Click="SaveSettings_Click"/>
+            <Button x:Name="sendTestMessageButton" Content="📩 Send Test Message" Click="{ x:Bind StorjData.SendTestMessageToDiscord }"/>
+            <Button x:Name="saveButton" Content="💾 Save Settings" Click="{ x:Bind StorjData.SaveSettings }"/>
         </StackPanel>
 
     </StackPanel>

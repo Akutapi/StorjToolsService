@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DiscordPage.g.h"
+#include "StorjData.h"
 
 namespace winrt::Storj_Tools::implementation
 {
@@ -12,10 +13,12 @@ namespace winrt::Storj_Tools::implementation
             // See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
         }
         
-        void PasteUserId_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args);
-		void PasteBotToken_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args);
-		void SaveSettings_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args);
-		void SendTestMessage_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args);
+        winrt::Windows::Foundation::IAsyncAction PasteUserId_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args);
+        winrt::Windows::Foundation::IAsyncAction PasteBotToken_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args);
+	    Storj_Tools::StorjData StorjData();
+    private:
+		Storj_Tools::StorjData storjData;
+        winrt::Windows::Foundation::IAsyncOperation<winrt::hstring> GetClipboardText();
     };
 }
 

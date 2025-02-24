@@ -31,6 +31,5 @@ private:
 	std::string dmChannelId;
 	std::string token;
 	std::string userID;
-	bool firstSet = true;
 };
 

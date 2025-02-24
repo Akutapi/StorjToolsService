@@ -12,5 +12,8 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::Storj_Tools::implementation
 {
-
+	Storj_Tools::StorjData NodesPage::StorjData()
+	{
+		return storjData;
+	}
 }

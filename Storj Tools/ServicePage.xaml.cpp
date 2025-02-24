@@ -16,4 +16,8 @@ namespace winrt::Storj_Tools::implementation
 	{
 		throw hresult_not_implemented();
 	}
+	Storj_Tools::StorjData ServicePage::StorjData()
+	{
+		return storjData;
+	}
 }

@@ -1,9 +1,11 @@
+import "StorjData.idl";
+
 namespace Storj_Tools
 {
     [default_interface]
     runtimeclass MainWindow : Microsoft.UI.Xaml.Window
     {
         MainWindow();
-        String Test;
+        StorjData StorjData{ get; };
     }
 }

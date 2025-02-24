@@ -27,8 +27,8 @@
 
                 <!-- Horní pevná část -->
                 <StackPanel Orientation="Horizontal" Padding="10">
-                    <TextBlock Text="{ x:Bind Test}" VerticalAlignment="Center" />
-                    <Button Content="Akce" Click="BTN_RestartService" Margin="10,0,0,0" />
+                    <TextBlock Text="{x:Bind StorjData.ServiceStatus, Mode=OneWay}" VerticalAlignment="Center" />
+                    <Button Content="Akce" Click="{x:Bind StorjData.RestartService}" Margin="10,0,0,0" />
                 </StackPanel>
 
                 <!-- Prostor pro stránky -->

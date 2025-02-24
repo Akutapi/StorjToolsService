@@ -1,0 +1,33 @@
+namespace Storj_Tools
+{
+    [default_interface]
+    runtimeclass StorjData : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+    {
+        StorjData();
+
+        // Main page
+        String ServiceStatus{ get; };
+		void RestartService();
+
+		// Setting from YAML file
+		void SaveSettings();
+		void LoadSettings();
+
+        // Service page
+		Single UpdateNodeInterval;
+		Single CheckNodeInterval;
+		Single LogReductionInterval;
+		Single LogReductionMaxSize;
+		Single LogReducedSize;
+
+		// Discord page
+		String BotToken;
+		String UserID;
+		void SendTestMessageToDiscord();
+
+		// Node page
+        
+        // Settings page
+        
+    }
+}
