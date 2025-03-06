@@ -12,12 +12,12 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::Storj_Tools::implementation
 {
-	void ServicePage::SaveSettings_Click([[maybe_unused]] Windows::Foundation::IInspectable const& sender, [[maybe_unused]] Microsoft::UI::Xaml::RoutedEventArgs const& args)
-	{
-		throw hresult_not_implemented();
-	}
-	Storj_Tools::StorjData ServicePage::StorjData()
+	Storj_Tools::StorjData ServicePage::Data()
 	{
 		return storjData;
+	}
+	void ServicePage::OnNavigatedTo([[maybe_unused]] winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args)
+	{
+		storjData = App::GetStorjData(); // Použití globální instance
 	}
 }

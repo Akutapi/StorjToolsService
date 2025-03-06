@@ -19,8 +19,10 @@ using namespace winrt::Microsoft::UI::Xaml::Navigation;
 
 namespace winrt::Storj_Tools::implementation
 {
-	MainWindow::MainWindow()
+	MainWindow::MainWindow() : storjData(App::GetStorjData())
 	{
+        InitializeComponent();
+        ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::NodesPage>());
 	}
 
     void MainWindow::NavView_SelectionChanged([[maybe_unused]] winrt::Microsoft::UI::Xaml::Controls::NavigationView const& sender, winrt::Microsoft::UI::Xaml::Controls::NavigationViewSelectionChangedEventArgs const& args)
@@ -33,10 +35,30 @@ namespace winrt::Storj_Tools::implementation
         if (tag.empty()) return;
         static const std::unordered_map<std::wstring, std::function<void()>> navigationMap =
         {
-            {L"NodesPage", [this]() { ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::NodesPage>());/* StorjData::Instance().UpdateNodeStatus();*/ }},
-            {L"ServicePage", [this]() { ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::ServicePage>()); /*StorjData::Instance().LoadConfig();*/  }},
-            {L"DiscordPage", [this]() { ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::DiscordPage>()); /*StorjData::Instance().LoadConfig();*/ }},
-            {L"Settings", [this]() { ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::SettingPage>()); }}
+            {
+                L"NodesPage", [this]()
+                {
+                    ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::NodesPage>());
+                }
+            },
+            {
+                L"ServicePage", [this]()
+                {
+                    ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::ServicePage>());
+                }
+            },
+            {
+                L"DiscordPage", [this]()
+                {
+                    ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::DiscordPage>());
+                }
+            },
+            {
+                L"Settings", [this]()
+                {
+                    ContentFrame().Navigate(winrt::xaml_typename<Storj_Tools::SettingPage>());
+                }
+            }
         };
 
 		auto navigation = navigationMap.find(tag.c_str());
@@ -46,7 +68,7 @@ namespace winrt::Storj_Tools::implementation
 		}
     }
 
-    Storj_Tools::StorjData MainWindow::StorjData()
+    Storj_Tools::StorjData MainWindow::Data()
     {
         return storjData;
     }

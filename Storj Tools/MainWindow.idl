@@ -6,6 +6,6 @@ namespace Storj_Tools
     runtimeclass MainWindow : Microsoft.UI.Xaml.Window
     {
         MainWindow();
-        StorjData StorjData{ get; };
+        StorjData Data{ get; };
     }
 }

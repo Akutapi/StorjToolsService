@@ -2,6 +2,8 @@
 #include "App.xaml.h"
 #include "MainWindow.xaml.h"
 #include "DataAdapter.h"
+#include <winrt/Windows.Storage.h>
+#include <winrt/Microsoft.UI.Dispatching.h>
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
@@ -15,6 +17,7 @@ namespace winrt::Storj_Tools::implementation
     /// Initializes the singleton application object.  This is the first line of authored code
     /// executed, and as such is the logical equivalent of main() or WinMain().
     /// </summary>
+
     App::App()
     {
 #if defined _DEBUG && !defined DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION
@@ -36,7 +39,15 @@ namespace winrt::Storj_Tools::implementation
     void App::OnLaunched([[maybe_unused]] LaunchActivatedEventArgs const& e)
     {
 		DataAdapter::Instance().Init();
+        GetStorjData().InitTheme();
         window = make<MainWindow>();
         window.Activate();
     }
+
+    // Statická metoda pro získání jediné instance StorjData
+    Storj_Tools::StorjData& App::GetStorjData()
+    {
+        return storjData;
+    }
 }
+

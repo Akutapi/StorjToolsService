@@ -6,11 +6,13 @@ namespace winrt::Storj_Tools::implementation
 {
     struct SettingPage : SettingPageT<SettingPage>
     {
-        SettingPage()
-        {
-            // Xaml objects should not call InitializeComponent during construction.
-            // See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
-        }
+		SettingPage() = default;
+
+		void OnNavigatedTo(winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args);
+        Storj_Tools::StorjData Data();
+       
+    private:
+        Storj_Tools::StorjData storjData;
     };
 }
 

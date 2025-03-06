@@ -6,6 +6,6 @@ namespace Storj_Tools
     runtimeclass NodesPage : Microsoft.UI.Xaml.Controls.Page
     {
         NodesPage();
-        StorjData StorjData{ get; };
+        StorjData Data{ get; };
     }
 }

@@ -6,14 +6,6 @@
 
 namespace winrt::Storj_Tools::implementation
 {
-	std::wstring Node::GetWName() const
-	{
-		return wName;
-	}
-	void Node::SetWName(std::wstring const& value)
-	{
-		wName = value;
-	}
 	hstring Node::Name() const
 	{
 		return name;
@@ -30,14 +22,6 @@ namespace winrt::Storj_Tools::implementation
 	{
 		path = value;
 	}
-	hstring Node::Status() const
-	{
-		return status;
-	}
-	void Node::Status(hstring const& value)
-	{
-		status = value;
-	}
 	hstring Node::SVersion() const
 	{
 		return sVersion;
@@ -46,20 +30,98 @@ namespace winrt::Storj_Tools::implementation
 	{
 		sVersion = value;
 	}
+	DWORD Node::DStatus() const
+	{
+		return dStatus;
+	}
+	void Node::DStatus(DWORD const& value)
+	{
+		switch (value)
+		{
+		case SERVICE_STOPPED:
+			hStatus = L"Service is stopped.";
+			statusIcon = L"\uE71A";
+			statusColor = SolidColorBrush(Colors::Red());
+			break;
+
+		case SERVICE_START_PENDING:
+			hStatus = L"Service is starting.";
+			statusIcon = L"\uE71A";
+			statusColor = SolidColorBrush(Colors::Red());
+			break;
+
+		case SERVICE_STOP_PENDING:
+			hStatus = L"Service is stopping.";
+			statusIcon = L"\uE71A";
+			statusColor = SolidColorBrush(Colors::Red());
+			break;
+
+		case SERVICE_RUNNING:
+			hStatus = L"Service is running.";
+			statusIcon = L"\uE71A";
+			statusColor = SolidColorBrush(Colors::Red());
+			break;
+
+		case SERVICE_CONTINUE_PENDING:
+			hStatus = L"Service is resuming.";
+			statusIcon = L"\uE71A";
+			statusColor = SolidColorBrush(Colors::Red());
+			break;
+
+		case SERVICE_PAUSE_PENDING:
+			hStatus = L"Service is pausing.";
+			statusIcon = L"\uE71A";
+			statusColor = SolidColorBrush(Colors::Red());
+			break;
+
+		case SERVICE_PAUSED:
+			hStatus = L"Service is paused.";
+			statusIcon = L"\uE71A";
+			statusColor = SolidColorBrush(Colors::Red());
+			break;
+		default:
+			hStatus = L"Unknown";
+			statusIcon = L"\uE71A";
+			statusColor = SolidColorBrush(Colors::Red());
+		}
+	}
+	hstring Node::HStatus() const
+	{
+		return hStatus;
+	}
 	hstring Node::StatusIcon() const
 	{
 		return statusIcon;
 	}
-	void Node::StatusIcon(hstring const& value)
-	{
-		statusIcon = value;
-	}
-	UINT32 Node::StatusColor() const
+	SolidColorBrush Node::StatusColor() const
 	{
 		return statusColor;
 	}
-	void Node::StatusColor(UINT32 value)
+	bool Node::IsStartButtonEnabled() const
 	{
-		statusColor = value;
+		if (hStatus == L"Service is running." || hStatus == L"Service is starting." || hStatus == L"Service is resuming.")
+		{
+			return false;
+		}
+		return true;
+	}
+	bool Node::operator==(Node const& other) const
+	{
+		 return name == other.name &&
+				path == other.path &&
+				hStatus == other.hStatus &&
+				sVersion == other.sVersion;
+	}
+	bool Node::operator!=(Node const& other) const
+	{
+		return !(*this == other);
+	}
+	bool Node::operator<(Node const& other) const
+	{
+		return name < other.name; // Porovnání podle jména pro seřazení
+	}
+	bool Node::operator>(Node const& other) const
+	{
+		return name > other.name; // Porovnání podle jména pro seřazení
 	}
 }

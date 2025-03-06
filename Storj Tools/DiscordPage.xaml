@@ -6,6 +6,7 @@
     xmlns:local="using:Storj_Tools"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    RequestedTheme="{x:Bind Data.CurrentTheme, Mode=OneWay}"
     mc:Ignorable="d">
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
@@ -17,7 +18,7 @@
         <StackPanel Orientation="Vertical" Spacing="5">
             <TextBlock Text="Enter your User ID (Numeric)" FontSize="14"/>
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <TextBox x:Name="userIdNumberBox" Width="200"  Text="{ x:Bind StorjData.UserID, Mode=TwoWay }"/>
+                <TextBox x:Name="userIdNumberBox" Width="200"  Text="{ x:Bind Data.UserID , Mode=TwoWay }"/>
                 <Button Content="📋 Paste" Click="PasteUserId_Click"/>
             </StackPanel>
         </StackPanel>
@@ -26,15 +27,15 @@
         <StackPanel Orientation="Vertical" Spacing="5">
             <TextBlock Text="Enter your Bot Token (Keep it secure!)" FontSize="14"/>
             <StackPanel Orientation="Horizontal" Spacing="10">
-                <TextBox x:Name="botTokenBox" Width="620" Text="{ x:Bind StorjData.BotToken, Mode=TwoWay }"/>
+                <TextBox x:Name="botTokenBox" Width="620" Text="{ x:Bind Data.BotToken, Mode=TwoWay }"/>
                 <Button Content="📋 Paste" Click="PasteBotToken_Click"/>
             </StackPanel>
         </StackPanel>
 
         <!-- Akce -->
         <StackPanel Orientation="Horizontal" Spacing="10">
-            <Button x:Name="sendTestMessageButton" Content="📩 Send Test Message" Click="{ x:Bind StorjData.SendTestMessageToDiscord }"/>
-            <Button x:Name="saveButton" Content="💾 Save Settings" Click="{ x:Bind StorjData.SaveSettings }"/>
+            <Button x:Name="sendTestMessageButton" Content="📩 Send Test Message" Click="{ x:Bind Data.SendTestMessageToDiscord }"/>
+            <Button x:Name="saveButton" Content="💾 Save Settings" Click="{ x:Bind Data.SaveSettings }"/>
         </StackPanel>
 
     </StackPanel>

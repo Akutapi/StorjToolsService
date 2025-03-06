@@ -7,16 +7,19 @@ namespace winrt::Storj_Tools::implementation
 {
     struct NodesPage : NodesPageT<NodesPage>
     {
-        NodesPage()
-        {
-            // Xaml objects should not call InitializeComponent during construction.
-            // See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
-        }
+        NodesPage() = default;
 
-        Storj_Tools::StorjData StorjData();
+        void OnNavigatedTo(winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args);
+		void OnNavigatedFrom(winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args);
+
+        Storj_Tools::StorjData Data();
+        void StartNodeService(Windows::Foundation::IInspectable const& sender, Microsoft::UI::Xaml::RoutedEventArgs const& args);
 
     private:
+
         Storj_Tools::StorjData storjData;
+        void OnUpdateTimerTick(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::Foundation::IInspectable const& args);
+        winrt::Microsoft::UI::Dispatching::DispatcherQueueTimer updateTimer{ nullptr };
     };
 }
 

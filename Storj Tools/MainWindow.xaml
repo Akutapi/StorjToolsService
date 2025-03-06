@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     Title="Storj Tools">
 
-    <NavigationView x:Name="NavView" IsSettingsVisible="True" PaneDisplayMode="Left" SelectionChanged="NavView_SelectionChanged">
+    <NavigationView x:Name="NavView" IsSettingsVisible="True" PaneDisplayMode="Left" SelectionChanged="NavView_SelectionChanged" RequestedTheme="{ x:Bind Data.CurrentTheme, Mode=OneWay }"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <!-- Boční menu -->
         <NavigationView.MenuItems>
             <NavigationViewItem Content="Nodes" Icon="Home" Tag="NodesPage" />
@@ -27,8 +27,8 @@
 
                 <!-- Horní pevná část -->
                 <StackPanel Orientation="Horizontal" Padding="10">
-                    <TextBlock Text="{x:Bind StorjData.ServiceStatus, Mode=OneWay}" VerticalAlignment="Center" />
-                    <Button Content="Akce" Click="{x:Bind StorjData.RestartService}" Margin="10,0,0,0" />
+                    <TextBlock Text="{x:Bind Data.ServiceStatus, Mode=OneWay}" VerticalAlignment="Center" />
+                    <Button Content="Akce" Click="{x:Bind Data.RestartService}" Margin="10,0,0,0" />
                 </StackPanel>
 
                 <!-- Prostor pro stránky -->

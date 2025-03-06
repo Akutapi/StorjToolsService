@@ -14,6 +14,11 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::Storj_Tools::implementation
 {
+	void DiscordPage::OnNavigatedTo([[maybe_unused]] winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args)
+	{
+		storjData = App::GetStorjData(); // Použití globální instance
+	}
+
 	winrt::Windows::Foundation::IAsyncAction DiscordPage::PasteUserId_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
 	{
 		hstring clipboardText = co_await GetClipboardText();
@@ -33,7 +38,7 @@ namespace winrt::Storj_Tools::implementation
 		co_return;
 	}
 
-	Storj_Tools::StorjData DiscordPage::StorjData()
+	Storj_Tools::StorjData DiscordPage::Data()
 	{
 		return storjData;
 	}
@@ -47,4 +52,5 @@ namespace winrt::Storj_Tools::implementation
         }
         co_return L"";
     }
+
 }

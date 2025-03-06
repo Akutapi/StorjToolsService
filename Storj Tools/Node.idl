@@ -6,9 +6,11 @@ namespace Storj_Tools
         Node();
         String Name;
         String Path;
-        String Status;
         String SVersion;
-        String StatusIcon;
-        UInt32 StatusColor;
+        UInt32 DStatus;
+        String HStatus{ get; };
+        String StatusIcon{ get; };
+        Microsoft.UI.Xaml.Media.SolidColorBrush StatusColor{ get; };
+        Boolean IsStartButtonEnabled();
     }
 }

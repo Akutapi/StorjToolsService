@@ -5,7 +5,7 @@ namespace Storj_Tools
     [default_interface]
     runtimeclass DiscordPage : Microsoft.UI.Xaml.Controls.Page
     {
-        DiscordPage();
-        StorjData StorjData{ get; };
+		DiscordPage();
+        StorjData Data{ get; };
     }
 }

@@ -1,8 +1,10 @@
+import "StorjData.idl";
 namespace Storj_Tools
 {
     [default_interface]
     runtimeclass SettingPage : Microsoft.UI.Xaml.Controls.Page
     {
         SettingPage();
+        StorjData Data{ get; };
     }
 }

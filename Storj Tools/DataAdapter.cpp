@@ -115,11 +115,13 @@ void DataAdapter::SetDiscordBotToken(const std::string& botToken)
 
 void DataAdapter::SaveSettings()
 {
+	std::lock_guard<std::mutex> lock(mtx);
 	configManager.SaveConfig();
 }
 
 void DataAdapter::LoadSettings()
 {
+	std::lock_guard<std::mutex> lock(mtx);
 	configManager.UpdateConfig();
 }
 

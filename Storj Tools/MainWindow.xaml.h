@@ -11,10 +11,10 @@ namespace winrt::Storj_Tools::implementation
 
 		void NavView_SelectionChanged(winrt::Microsoft::UI::Xaml::Controls::NavigationView const& sender, winrt::Microsoft::UI::Xaml::Controls::NavigationViewSelectionChangedEventArgs const& args);
 
-		Storj_Tools::StorjData StorjData();
+		Storj_Tools::StorjData Data();
 
 	private:
-		Storj_Tools::StorjData storjData;
+        Storj_Tools::StorjData storjData;
     };
 }
 

@@ -6,6 +6,6 @@ namespace Storj_Tools
     runtimeclass ServicePage : Microsoft.UI.Xaml.Controls.Page
     {
         ServicePage();
-        StorjData StorjData{ get; };
+        StorjData Data{ get; };
     }
 }

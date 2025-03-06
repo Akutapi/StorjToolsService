@@ -1,5 +1,7 @@
+import "Node.idl"; // Pøidejte tento øádek
+
 namespace Storj_Tools
-{
+{	
     [default_interface]
     runtimeclass StorjData : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
     {
@@ -26,8 +28,14 @@ namespace Storj_Tools
 		void SendTestMessageToDiscord();
 
 		// Node page
+		Windows.Foundation.Collections.IObservableVector<Storj_Tools.Node> Nodes();
+		void UpdateNodes();
+		void StartNodeService(String nodeName);
         
         // Settings page
-        
-    }
+		void InitTheme();
+		Boolean IsLightMode;
+		Microsoft.UI.Xaml.ElementTheme CurrentTheme;
+		Single UpdateNodeUIInterval;
+	}
 }

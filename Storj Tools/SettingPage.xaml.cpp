@@ -12,5 +12,12 @@ using namespace Microsoft::UI::Xaml;
 
 namespace winrt::Storj_Tools::implementation
 {
-
+    Storj_Tools::StorjData SettingPage::Data()
+    {
+        return storjData;
+    }
+    void SettingPage::OnNavigatedTo([[maybe_unused]] winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args)
+    {
+		storjData = App::GetStorjData(); // Použití globální instance
+    }
 }
