@@ -55,7 +55,7 @@ bool Tools::LogMaintenance()
 	// Pokud nejsou žádné StroJ Nody k redukci log souborù, skonèí
 	if (services.empty())
 	{
-		logger.LogInfo(L"No StroJ Nodes for log file reduction.");
+		//logger.LogInfo(L"No StroJ Nodes for log file reduction.");
 		return true;
 	}
 
@@ -117,7 +117,7 @@ bool Tools::LogMaintenance()
 
 	if (!needsMaintenance(servicesToMaintenance))
 	{
-		logger.LogInfo(L"Log maintenance completed.");
+		//logger.LogInfo(L"Log maintenance completed.");
 		return true;
 	}
 
@@ -149,7 +149,7 @@ bool Tools::CheckStorjNodesStatus()
 	std::vector<std::wstring> services = GetServices(SERVICE_SET::ALL_TO_CHECK);
 	if (services.empty())
 	{
-		logger.LogInfo(L"No StroJ Nodes found.");
+		//logger.LogInfo(L"No StroJ Nodes found.");
 		return true;
 	}
 
@@ -173,7 +173,7 @@ bool Tools::CheckStorjNodesStatus()
 
 	if (!needsStart(servicesStatus))
 	{
-		logger.LogInfo(L"Services checked: All services are running.");
+		//logger.LogInfo(L"Services checked: All services are running.");
 		return true;
 	}
 
@@ -284,7 +284,7 @@ bool Tools::CheckStorjNodeUpdate()
 
 	if (!needsUpdate(servicesToUpdate))
 	{
-		logger.LogInfo(L"Check and update completed.");
+		//logger.LogInfo(L"Check and update completed.");
 		return true;
 	}
 

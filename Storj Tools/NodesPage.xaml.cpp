@@ -4,47 +4,51 @@
 #include "NodesPage.g.cpp"
 #endif
 
+using namespace std;
+using namespace std::chrono;
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
+using namespace Microsoft::UI::Xaml::Navigation;
+using namespace Microsoft::UI::Xaml::Controls;
+using namespace Windows::Foundation;
+using namespace Microsoft::UI::Dispatching;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace winrt::Storj_Tools::implementation
 {
-	void NodesPage::StartNodeService(Windows::Foundation::IInspectable const& sender, [[maybe_unused]] Microsoft::UI::Xaml::RoutedEventArgs const& args)
+	void NodesPage::StartNodeService(IInspectable const& sender, [[maybe_unused]] RoutedEventArgs const& args)
 	{
-		auto button = sender.as<Microsoft::UI::Xaml::Controls::Button>();
-		if (button)
-		{
-			hstring nodeName = unbox_value<hstring>(button.CommandParameter());
-			storjData.StartNodeService(nodeName);
-		}
+		auto button = sender.as<Button>();
+		if (!button) return;
+		hstring nodeName = unbox_value<hstring>(button.CommandParameter());
+		storjData.StartNodeService(nodeName);
 	}
-	void NodesPage::OnUpdateTimerTick([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Windows::Foundation::IInspectable const& args)
+
+	void NodesPage::OnUpdateTimerTick([[maybe_unused]] IInspectable const& sender, [[maybe_unused]] IInspectable const& args)
 	{
 		storjData.UpdateNodes();
 	}
-	void NodesPage::OnNavigatedTo([[maybe_unused]] winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args)
+
+	void NodesPage::OnNavigatedTo([[maybe_unused]] NavigationEventArgs const& args)
 	{
 		storjData = App::GetStorjData(); // Použití globální instance 
 		storjData.UpdateNodes();
-		if (!updateTimer)
-		{
-			//updateTimer = winrt::Microsoft::UI::Dispatching::DispatcherQueue::GetForCurrentThread().CreateTimer();
-			//updateTimer.Interval(std::chrono::seconds(static_cast<int>(std::round(storjData.UpdateNodeUIInterval()))));
-			//updateTimer.Tick({ this, &NodesPage::OnUpdateTimerTick });
-			//updateTimer.Start();
-		}
+		if (updateTimer) return;
+		updateTimer = DispatcherQueue::GetForCurrentThread().CreateTimer();
+		updateTimer.Interval(seconds(static_cast<int>(round(storjData.UpdateNodeUIInterval()))));
+		updateTimer.Tick({ this, &NodesPage::OnUpdateTimerTick });
+		updateTimer.Start();
 	}
+
 	void NodesPage::OnNavigatedFrom([[maybe_unused]] winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args)
 	{
-		if (updateTimer)
-		{
-			updateTimer.Stop();
-			updateTimer = nullptr;
-		}
+		if (!updateTimer) return;
+		updateTimer.Stop();
+		updateTimer = nullptr;
 	}
+
 	Storj_Tools::StorjData NodesPage::Data()
 	{
 		return storjData;

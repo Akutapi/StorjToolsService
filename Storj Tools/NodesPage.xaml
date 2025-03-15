@@ -6,37 +6,52 @@
     xmlns:local="using:Storj_Tools"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Top"
+    Margin="30,30,30,30"
     RequestedTheme="{x:Bind Data.CurrentTheme, Mode=OneWay}"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="20">
-
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <!-- Nadpis -->
-        <TextBlock Text="Node List" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10"/>
-
-        <!-- Seznam nodů --> 
-        <ListView x:Name="nodeListView" ItemsSource="{x:Bind Data.Nodes()}" SelectionMode="None">
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Node List" FontSize="24" FontWeight="Bold" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+        </StackPanel>
+        <!-- Seznam nodů -->
+        <ListView Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" x:Name="nodeListView" ItemsSource="{x:Bind Data.Nodes()}" SelectionMode="None" ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:Node">
-                    <StackPanel Orientation="Horizontal" Spacing="10" Padding="5">
-
-                        <!-- Ikonka stavu -->
-                        <FontIcon Glyph="{x:Bind StatusIcon}" FontSize="20" Foreground="{x:Bind StatusColor}" VerticalAlignment="Center"/>
-                        <!-- Název služby -->
-                        <TextBlock Text="{x:Bind Name}" FontSize="16" FontWeight="Bold" Width="150"/>
-                        <!-- Verze služby -->
-                        <TextBlock Text="{x:Bind SVersion}" FontSize="14" Width="80" VerticalAlignment="Center"/>
-                        <!-- Cesta služby -->
-                        <TextBlock Text="{x:Bind Path}" FontSize="14" Width="200" VerticalAlignment="Center"/>
-                        <!-- Popis stavu služby-->
-                        <TextBlock Text="{x:Bind HStatus}" FontSize="14" Width="200" VerticalAlignment="Center"/>
-                        <!-- Tlačítko pro spuštění služby-->
-                        <Button Content="Start" IsEnabled="{x:Bind IsStartButtonEnabled() }" Click="StartNodeService" CommandParameter="{x:Bind Name}"/>
-
-                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="0,10,20,0"  BorderThickness="1" BorderBrush="{ThemeResource AppBarItemPointerOverBackgroundThemeBrush}" CornerRadius="8" Padding="10">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" >
+                                <!-- Ikonka stavu -->
+                                <FontIcon Glyph="{x:Bind StatusIcon}" FontSize="20" Foreground="{x:Bind StatusColor}" VerticalAlignment="Center"  Margin="5,0,20,0" ToolTipService.ToolTip="{x:Bind HStatus}"/>
+                                <!-- Název služby -->
+                                <TextBlock Text="{x:Bind Name}" FontSize="14" FontWeight="Bold" Width="150" VerticalAlignment="Center" ToolTipService.ToolTip="{x:Bind Path}"/>
+                                <!-- Verze služby -->
+                                <TextBlock Text="{x:Bind SVersion}" FontSize="14" Width="80" VerticalAlignment="Center"/>
+                                <!-- Tlačítko pro spuštění služby-->
+                                <Button IsEnabled="{x:Bind IsStartButtonEnabled() }" Click="StartNodeService" CommandParameter="{x:Bind Name}" ToolTipService.ToolTip="Start">
+                                <Button.Content>
+                                    <SymbolIcon Symbol="Play" />
+                                </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                        <StackPanel Grid.Column="1">
+                        </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
 
-    </StackPanel>
+    </Grid>
 </Page>

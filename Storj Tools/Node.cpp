@@ -40,49 +40,49 @@ namespace winrt::Storj_Tools::implementation
 		{
 		case SERVICE_STOPPED:
 			hStatus = L"Service is stopped.";
-			statusIcon = L"\uE71A";
+			statusIcon = L"\uE8CD";
 			statusColor = SolidColorBrush(Colors::Red());
 			break;
 
 		case SERVICE_START_PENDING:
 			hStatus = L"Service is starting.";
-			statusIcon = L"\uE71A";
-			statusColor = SolidColorBrush(Colors::Red());
+			statusIcon = L"\uE8CE";
+			statusColor = SolidColorBrush(Colors::Green());
 			break;
 
 		case SERVICE_STOP_PENDING:
 			hStatus = L"Service is stopping.";
-			statusIcon = L"\uE71A";
+			statusIcon = L"\uE8CD";
 			statusColor = SolidColorBrush(Colors::Red());
 			break;
 
 		case SERVICE_RUNNING:
 			hStatus = L"Service is running.";
-			statusIcon = L"\uE71A";
-			statusColor = SolidColorBrush(Colors::Red());
+			statusIcon = L"\uE8CE";
+			statusColor = SolidColorBrush(Colors::Green());
 			break;
 
 		case SERVICE_CONTINUE_PENDING:
 			hStatus = L"Service is resuming.";
-			statusIcon = L"\uE71A";
-			statusColor = SolidColorBrush(Colors::Red());
+			statusIcon = L"\uE8CE";
+			statusColor = SolidColorBrush(Colors::Green());
 			break;
 
 		case SERVICE_PAUSE_PENDING:
 			hStatus = L"Service is pausing.";
-			statusIcon = L"\uE71A";
+			statusIcon = L"\uE8CD";
 			statusColor = SolidColorBrush(Colors::Red());
 			break;
 
 		case SERVICE_PAUSED:
 			hStatus = L"Service is paused.";
-			statusIcon = L"\uE71A";
+			statusIcon = L"\uE8CD";
 			statusColor = SolidColorBrush(Colors::Red());
 			break;
 		default:
 			hStatus = L"Unknown";
-			statusIcon = L"\uE71A";
-			statusColor = SolidColorBrush(Colors::Red());
+			statusIcon = L"\uE9CE";
+			statusColor = SolidColorBrush(Colors::Yellow());
 		}
 	}
 	hstring Node::HStatus() const

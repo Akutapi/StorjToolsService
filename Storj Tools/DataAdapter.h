@@ -7,6 +7,8 @@
 #include "SCManager.h"
 #include "ServiceUpdater.h"
 
+using namespace std;
+
 class DataAdapter
 {
 public:
@@ -20,7 +22,7 @@ public:
 	void Init();
 
 	// ServisStatus
-	std::wstring GetServiceStatus();
+	wstring GetServiceStatus();
 	void RestartService();
 
 	// Nastavení z konfiguraèního souboru
@@ -34,27 +36,32 @@ public:
 	void SetMaxLogSize(float size);
 	float GetLogReducedSize();
 	void SetLogReducedSize(float size);
-	std::string GetDiscordUserID();
-	void SetDiscordUserID(const std::string& userID);
-	std::string GetDiscordBotToken();
-	void SetDiscordBotToken(const std::string& botToken);
+	string GetDiscordUserID();
+	void SetDiscordUserID(const string& userID);
+	string GetDiscordBotToken();
+	void SetDiscordBotToken(const string& botToken);
 	void SaveSettings();
 	void LoadSettings();
 
 	// Discord
 	void SendTestMessageToDiscord();
 
+	// Nodes
+	vector<wstring> GetNodesNames();
+	wstring GetNodePath(wstring name);
+	wstring GetNodeVersion(wstring name);
+	DWORD GetNodeStatus(wstring name);
+	void StartNode(wstring name);
 
 private:
 	DataAdapter();
 	~DataAdapter();
-	std::mutex mtx;
+	wstring StatusDwordToWstring(DWORD dw);
+	mutex mtx;
 	Logger logger;
 	ConfigFileManager configManager;
 	DiscordManager discordManager;
 	SCManager scManager;
 	ServiceUpdater serviceUpdater;	
-
-	std::wstring serviceStatus = L"svefwef";
 };
 

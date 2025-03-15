@@ -53,12 +53,23 @@ bool ServiceUpdater::DeleteShadowCopy(const std::wstring& sourceFilePath)
 bool ServiceUpdater::UpdateService(const std::wstring& sourceFilePath, const std::wstring& fileToUpdatePath)
 {
 	std::wstring shadowFilePath = GetShadowFilePath(sourceFilePath);
-	if (!std::filesystem::copy_file(shadowFilePath, fileToUpdatePath, std::filesystem::copy_options::overwrite_existing))
+	std::wstring tempFilePath = fileToUpdatePath + L".tmp";
+	try
 	{
-		logger.LogError(L"Error while updating file");
+		if (!std::filesystem::copy_file(shadowFilePath, tempFilePath, std::filesystem::copy_options::overwrite_existing))
+		{
+			logger.LogError(L"Error while updating file");
+			return false;
+		}
+		std::filesystem::rename(tempFilePath, fileToUpdatePath);
+		return true;
+	}
+
+	catch (...)
+	{
+		logger.LogError(L"Error while updating file: Unknown exception.");
 		return false;
 	}
-	return true;
 }
 
 bool ServiceUpdater::NeedUpdate(const std::wstring& sourceFilePath, const std::wstring& fileToUpdatePath) 

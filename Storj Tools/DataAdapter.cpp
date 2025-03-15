@@ -2,12 +2,40 @@
 #include "DataAdapter.h"
 #include <string>
 
+#define SERVICE_TOOL_NAME L"Storj Tools Service"
+#define SERVICE_NAME L"storagenode"
+#define SERVICE_UPDATE_NAME L"updater"
+#define EXE_SERVICE_NAME L"storagenode.exe"
+
 DataAdapter::DataAdapter() : logger(L"Debug"), configManager(logger), discordManager(logger), scManager(logger), serviceUpdater(logger)
 {
 }
 
 DataAdapter::~DataAdapter()
 {
+}
+
+wstring DataAdapter::StatusDwordToWstring(DWORD dw)
+{
+	switch (dw)
+	{
+	case SERVICE_STOPPED:
+		return L"Stopped";
+	case SERVICE_START_PENDING:
+		return L"Start pending";
+	case SERVICE_STOP_PENDING:
+		return L"Stop pending";
+	case SERVICE_RUNNING:
+		return L"Running";
+	case SERVICE_CONTINUE_PENDING:
+		return L"Continue pending";
+	case SERVICE_PAUSE_PENDING:
+		return L"Pause pending";
+	case SERVICE_PAUSED:
+		return L"Paused";
+	default:
+		return L"Unknown";
+	}
 }
 
 void DataAdapter::Init()
@@ -20,13 +48,14 @@ void DataAdapter::Init()
 std::wstring DataAdapter::GetServiceStatus()
 {
 	std::lock_guard<std::mutex> lock(mtx);
-	return serviceStatus;
+	return StatusDwordToWstring(scManager.GetServiceStatus(SERVICE_TOOL_NAME));
 }
 
 void DataAdapter::RestartService()
 {
 	std::lock_guard<std::mutex> lock(mtx);
-	OutputDebugString(L"RestartService byl vyžádán\n");
+	scManager.CustomStopServiceWithWait(SERVICE_TOOL_NAME);
+	scManager.CustomStartServiceWithWait(SERVICE_TOOL_NAME);
 }
 
 float DataAdapter::GetNodesUpdateInterval()
@@ -130,4 +159,40 @@ void DataAdapter::SendTestMessageToDiscord()
 	std::lock_guard<std::mutex> lock(mtx);
 	discordManager.SetDiscordBot(configManager.GetDiscordBotToken(), configManager.GetDiscordUserID());
 	discordManager.sendDM(L"Test Zpráva z GUI");
+}
+
+vector<wstring> DataAdapter::GetNodesNames()
+{
+	std::vector<std::wstring> services = scManager.GetServicesByName(SERVICE_NAME);
+	std::vector<std::wstring> tempServices;
+	for (auto& service : services)
+	{
+		if (service.find(SERVICE_UPDATE_NAME) == std::wstring::npos)
+		{
+			tempServices.push_back(service);
+		}
+	}
+	services = tempServices;
+	tempServices.clear();
+	return services;
+}
+
+wstring DataAdapter::GetNodePath(wstring name)
+{
+	return scManager.GetServicePathByName(name);
+}
+
+wstring DataAdapter::GetNodeVersion(wstring name)
+{
+	return serviceUpdater.GetStringFileVersion(scManager.GetServicePathByName(name));
+}
+
+DWORD DataAdapter::GetNodeStatus(wstring name)
+{
+	return scManager.GetServiceStatus(name);
+}
+
+void DataAdapter::StartNode(wstring name)
+{
+	scManager.CustomStartServiceWithWait(name);
 }

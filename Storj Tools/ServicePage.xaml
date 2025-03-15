@@ -6,46 +6,55 @@
     xmlns:local="using:Storj_Tools"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    HorizontalAlignment="Left"
+    VerticalAlignment="Top"
+    Margin="30,30,30,30"
     RequestedTheme="{x:Bind Data.CurrentTheme, Mode=OneWay}"
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
 
         <!-- Nadpis -->
-        <TextBlock Text="Service Settings" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <TextBlock Text="Service Settings" FontSize="24" FontWeight="Bold" HorizontalAlignment="Left"/>
 
         <!-- Interval aktualizace nodů -->
-        <StackPanel Orientation="Vertical" Spacing="5">
+        <StackPanel Orientation="Vertical" Margin="0,20,0,0">
             <TextBlock Text="Update interval for nodes (hours)" FontSize="14"/>
-            <NumberBox x:Name="updateIntervalBox" Minimum="0" Width="150" Value="{ x:Bind Data.UpdateNodeInterval, Mode=TwoWay}"/>
+            <NumberBox x:Name="updateIntervalBox" Minimum="0" HorizontalAlignment="Left" Width="64" Value="{ x:Bind Data.UpdateNodeInterval, Mode=TwoWay}"  Margin="0,5,0,0"/>
         </StackPanel>
 
         <!-- Interval kontroly nodů -->
         <StackPanel Orientation="Vertical" Spacing="5">
-            <TextBlock Text="Health check interval for nodes (hours)" FontSize="14"/>
-            <NumberBox x:Name="healthCheckIntervalBox" Minimum="0" Width="150" Value="{ x:Bind Data.CheckNodeInterval, Mode=TwoWay}"/>
+            <TextBlock Text="Health check interval for nodes (hours)" FontSize="14" Margin="0,20,0,0"/>
+            <NumberBox x:Name="healthCheckIntervalBox" HorizontalAlignment="Left" Minimum="0" Width="64" Value="{ x:Bind Data.CheckNodeInterval, Mode=TwoWay}" Margin="0,5,0,0"/>
         </StackPanel>
 
         <!-- Interval údržby logů -->
         <StackPanel Orientation="Vertical" Spacing="5">
-            <TextBlock Text="Log maintenance interval (hours)" FontSize="14"/>
-            <NumberBox x:Name="logMaintenanceIntervalBox" Minimum="0" Width="150" Value="{ x:Bind Data.LogReductionInterval, Mode=TwoWay }"/>
+            <TextBlock Text="Log maintenance interval (hours)" FontSize="14" Margin="0,20,0,0"/>
+            <NumberBox x:Name="logMaintenanceIntervalBox" HorizontalAlignment="Left" Minimum="0" Width="64" Value="{ x:Bind Data.LogReductionInterval, Mode=TwoWay }" Margin="0,5,0,0"/>
         </StackPanel>
 
         <!-- Maximální velikost logu -->
         <StackPanel Orientation="Vertical" Spacing="5">
-            <TextBlock Text="Max log file size before reduction (GB)" FontSize="14"/>
-            <NumberBox x:Name="maxLogSizeBox" Minimum="0.02" Width="150" Value="{ x:Bind Data.LogReductionMaxSize, Mode=TwoWay }"/>
+            <TextBlock Text="Max log file size before reduction (GB)" FontSize="14" Margin="0,20,0,0"/>
+            <NumberBox x:Name="maxLogSizeBox" HorizontalAlignment="Left" Minimum="0.02" Width="64" Value="{ x:Bind Data.LogReductionMaxSize, Mode=TwoWay }" Margin="0,5,0,0"/>
         </StackPanel>
 
         <!-- Redukovaná velikost logu -->
         <StackPanel Orientation="Vertical" Spacing="5">
-            <TextBlock Text="Reduced log file size (GB)" FontSize="14"/>
-            <NumberBox x:Name="reducedLogSizeBox" Minimum="0.01" Width="150" Value="{ x:Bind Data.LogReducedSize, Mode=TwoWay }"/>
+            <TextBlock Text="Reduced log file size (GB)" FontSize="14" Margin="0,20,0,0"/>
+            <NumberBox x:Name="reducedLogSizeBox" HorizontalAlignment="Left" Minimum="0.01" Width="64" Value="{ x:Bind Data.LogReducedSize, Mode=TwoWay }" Margin="0,5,0,0"/>
         </StackPanel>
 
         <!-- Tlačítko Save -->
-        <Button x:Name="saveButton" Content="💾 Save Settings" Click="{ x:Bind Data.SaveSettings }" HorizontalAlignment="Center"/>
-
+        <Button x:Name="saveButton" Click="{ x:Bind Data.SaveSettings }" HorizontalAlignment="Left" Margin="0,10,0,0">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Save" Margin="0,0,10,0"/>
+                    <TextBlock Text="Save Settings" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button.Content>
+        </Button>
     </StackPanel>
 </Page>

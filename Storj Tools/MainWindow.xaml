@@ -8,8 +8,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Storj Tools">
+    <Grid RequestedTheme="{x:Bind Data.CurrentTheme, Mode=OneWay}" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Image Source="ms-appx:///Assets/LockScreenLogo.scale-200.png" Width="30" Height="30" Margin="10,10,0,0" VerticalAlignment="Center"/>
+            <TextBlock Text="Storj Tools" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0" />
+            <TextBlock Text="Servis Status:" FontSize="16" VerticalAlignment="Center" Margin="50,0,0,0"/>
+            <FontIcon Glyph="&#xE781;" FontSize="20" Foreground="{x:Bind Data.ServiceStatusColor}" VerticalAlignment="Center"  Margin="10,0,0,0" ToolTipService.ToolTip="{x:Bind Data.ServiceStatus}"/>
+            <Button Click="{x:Bind Data.RestartService}" Margin="10,0,0,0" ToolTipService.ToolTip="Restart service.">
+                <Button.Content>
+                    <SymbolIcon Symbol="Refresh" />
+                </Button.Content>
+            </Button>
 
-    <NavigationView x:Name="NavView" IsSettingsVisible="True" PaneDisplayMode="Left" SelectionChanged="NavView_SelectionChanged" RequestedTheme="{ x:Bind Data.CurrentTheme, Mode=OneWay }"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        </StackPanel>
+        <NavigationView x:Name="NavView" IsSettingsVisible="True" PaneDisplayMode="Left" SelectionChanged="NavView_SelectionChanged" BackRequested="NavView_BackRequested" RequestedTheme="{ x:Bind Data.CurrentTheme, Mode=OneWay }"  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Grid.Row="1">
         <!-- Boční menu -->
         <NavigationView.MenuItems>
             <NavigationViewItem Content="Nodes" Icon="Home" Tag="NodesPage" />
@@ -19,21 +35,8 @@
 
         <!-- Hlavní obsah -->
         <NavigationView.Content>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <!-- Horní pevná část -->
-                <StackPanel Orientation="Horizontal" Padding="10">
-                    <TextBlock Text="{x:Bind Data.ServiceStatus, Mode=OneWay}" VerticalAlignment="Center" />
-                    <Button Content="Akce" Click="{x:Bind Data.RestartService}" Margin="10,0,0,0" />
-                </StackPanel>
-
-                <!-- Prostor pro stránky -->
-                <Frame x:Name="ContentFrame" Grid.Row="1" />
-            </Grid>
+            <Frame x:Name="ContentFrame"  />
         </NavigationView.Content>
-    </NavigationView>
+        </NavigationView>
+    </Grid>
 </Window>

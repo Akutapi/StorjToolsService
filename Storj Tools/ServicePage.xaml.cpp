@@ -5,7 +5,7 @@
 #endif
 
 using namespace winrt;
-using namespace Microsoft::UI::Xaml;
+using namespace Microsoft::UI::Xaml::Navigation;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -16,7 +16,7 @@ namespace winrt::Storj_Tools::implementation
 	{
 		return storjData;
 	}
-	void ServicePage::OnNavigatedTo([[maybe_unused]] winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args)
+	void ServicePage::OnNavigatedTo([[maybe_unused]] NavigationEventArgs const& args)
 	{
 		storjData = App::GetStorjData(); // Použití globální instance
 	}

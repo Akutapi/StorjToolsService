@@ -3,13 +3,16 @@
 #include "ServicePage.g.h"
 #include "StorjData.h"
 
+using namespace winrt;
+using namespace Microsoft::UI::Xaml::Navigation;
+
 namespace winrt::Storj_Tools::implementation
 {
     struct ServicePage : ServicePageT<ServicePage>
     {
 		ServicePage() = default;
 
-        void OnNavigatedTo(winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args);
+        void OnNavigatedTo(NavigationEventArgs const& args);
         Storj_Tools::StorjData Data();
 
     private:

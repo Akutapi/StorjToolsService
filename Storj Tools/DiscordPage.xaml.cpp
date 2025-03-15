@@ -8,18 +8,21 @@
 
 using namespace winrt;
 using namespace Microsoft::UI::Xaml;
+using namespace Microsoft::UI::Xaml::Navigation;
+using namespace Windows::Foundation;
+using namespace Windows::ApplicationModel::DataTransfer;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace winrt::Storj_Tools::implementation
 {
-	void DiscordPage::OnNavigatedTo([[maybe_unused]] winrt::Microsoft::UI::Xaml::Navigation::NavigationEventArgs const& args)
+	void DiscordPage::OnNavigatedTo([[maybe_unused]] NavigationEventArgs const& args)
 	{
 		storjData = App::GetStorjData(); // Použití globální instance
 	}
 
-	winrt::Windows::Foundation::IAsyncAction DiscordPage::PasteUserId_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+	IAsyncAction DiscordPage::PasteUserId_Click([[maybe_unused]] IInspectable const& sender, [[maybe_unused]] RoutedEventArgs const& args)
 	{
 		hstring clipboardText = co_await GetClipboardText();
 		if (!clipboardText.empty())
@@ -28,7 +31,8 @@ namespace winrt::Storj_Tools::implementation
 		}
 		co_return;
 	}
-	winrt::Windows::Foundation::IAsyncAction DiscordPage::PasteBotToken_Click([[maybe_unused]] winrt::Windows::Foundation::IInspectable const& sender, [[maybe_unused]] winrt::Microsoft::UI::Xaml::RoutedEventArgs const& args)
+
+	IAsyncAction DiscordPage::PasteBotToken_Click([[maybe_unused]] IInspectable const& sender, [[maybe_unused]] RoutedEventArgs const& args)
 	{
 		hstring clipboardText = co_await GetClipboardText();
 		if (!clipboardText.empty())
@@ -43,10 +47,10 @@ namespace winrt::Storj_Tools::implementation
 		return storjData;
 	}
 
-    winrt::Windows::Foundation::IAsyncOperation<winrt::hstring> DiscordPage::GetClipboardText()
+    IAsyncOperation<hstring> DiscordPage::GetClipboardText()
     {
-        auto dataPackageView = winrt::Windows::ApplicationModel::DataTransfer::Clipboard::GetContent();
-        if (dataPackageView.Contains(winrt::Windows::ApplicationModel::DataTransfer::StandardDataFormats::Text()))
+        auto dataPackageView = Clipboard::GetContent();
+        if (dataPackageView.Contains(StandardDataFormats::Text()))
         {
             co_return co_await dataPackageView.GetTextAsync();
         }

@@ -9,74 +9,75 @@
 #include <winrt/Microsoft.UI.Xaml.Hosting.h>
 #include "App.xaml.h"
 
-// dočasné jen pro testování
-#include <random>
-#include <ctime>
+
+using namespace std;
+using namespace winrt;
+using namespace Microsoft::UI::Xaml;
+using namespace Microsoft::UI::Xaml::Data;
+using namespace Microsoft::UI::Xaml::Media;
+using namespace winrt::Windows::Foundation::Collections;
+using namespace winrt::Windows::Storage;
 
 namespace winrt::Storj_Tools::implementation
 {
-	StorjData::StorjData()
-	{
-	}
+	StorjData::StorjData() : isLightingMode(true), currentTheme(ElementTheme::Light)
+    {
+    }
 
-    winrt::event_token StorjData::PropertyChanged(Microsoft::UI::Xaml::Data::PropertyChangedEventHandler const& handler)
+    event_token StorjData::PropertyChanged(PropertyChangedEventHandler const& handler)
     {
         return propertyChanged.add(handler);
     }
 
-    void StorjData::PropertyChanged(winrt::event_token const& token)
+    void StorjData::PropertyChanged(event_token const& token)
     {
         propertyChanged.remove(token);
     }
 
-    winrt::Windows::Foundation::Collections::IObservableVector<Storj_Tools::Node> StorjData::Nodes()
+    IObservableVector<Storj_Tools::Node> StorjData::Nodes()
     {
         return observableNodes;
     }
 
     void StorjData::UpdateNodes()
     {
-		OutputDebugString(L"UpdateNodes byl vyžádán\n");
-		std::vector<Storj_Tools::Node> vectorNodes = GetNodes();
-		if (!isVectorsNodesEquals(vectorNodes, observableNodes))
+		vector<Storj_Tools::Node> vectorNodes = GetNodes();
+		if (isVectorsNodesEquals(vectorNodes, observableNodes)) return;
+		observableNodes.Clear();
+		for (const auto& node : vectorNodes)
 		{
-			observableNodes.Clear();
-			for (const auto& node : vectorNodes)
-			{
-				observableNodes.Append(node);
-			}
+			observableNodes.Append(node);
 		}
     }
 
     void StorjData::StartNodeService(hstring nodeName)
     {
-        std::wstring msg = HstringToWstring(nodeName);
-        std::wstring debugMsg = L"StartService byl vyžádán pro uzel: " + msg + L"\n";
-        OutputDebugString(debugMsg.c_str());
+		dataAdapter.StartNode(HstringToWstring(nodeName));
     }
 
     hstring StorjData::ServiceStatus()
     {
-        OutputDebugString(L"ServiceStatus byl vyžádán\n");
 		return WstringToHstring(dataAdapter.GetServiceStatus());
+    }
+
+    SolidColorBrush StorjData::ServiceStatusColor()
+    {
+        return (dataAdapter.GetServiceStatus() == L"Running") ? SolidColorBrush(Colors::Green()) : SolidColorBrush(Colors::Red());
     }
 
     void StorjData::RestartService()
     {
-        OutputDebugString(L"RestartService byl vyžádán\n");
         dataAdapter.RestartService();
     }
 
     void StorjData::SaveSettings()
     {
 		dataAdapter.SaveSettings();
-		OutputDebugString(L"SaveSetting byl vyžádán\n");
     }
 
     void StorjData::LoadSettings()
     {
 		dataAdapter.LoadSettings();
-		OutputDebugString(L"LoadSetting byl vyžádán\n");
     }
 
     FLOAT StorjData::UpdateNodeInterval()
@@ -89,7 +90,6 @@ namespace winrt::Storj_Tools::implementation
 		if (dataAdapter.GetNodesUpdateInterval() == value) return;
     	dataAdapter.SetNodesUpdateInterval(value);
         RaisePropertyChanged(L"UpdateNodeInterval");
-        OutputDebugString(L"UpdateNodeInterval byl změněn\n");
     }
 
     FLOAT StorjData::CheckNodeInterval()
@@ -102,7 +102,6 @@ namespace winrt::Storj_Tools::implementation
 		if (dataAdapter.GetCheckNodesInterval() == value) return;
      	dataAdapter.SetCheckNodesInterval(value);
         RaisePropertyChanged(L"CheckNodeInterval");
-        OutputDebugString(L"CheckNodeInterval byl změněn\n");
     }
 
     FLOAT StorjData::LogReductionInterval()
@@ -115,7 +114,6 @@ namespace winrt::Storj_Tools::implementation
 		if (dataAdapter.GetLogReductionInterval() == value) return;
 		dataAdapter.SetLogReductionInterval(value);
 		RaisePropertyChanged(L"LogReductionInterval");
-		OutputDebugString(L"LogReductionInterval byl změněn\n");
     }
 
     FLOAT StorjData::LogReductionMaxSize()
@@ -128,7 +126,6 @@ namespace winrt::Storj_Tools::implementation
 		if (dataAdapter.GetMaxLogSize() == value) return;
   		dataAdapter.SetMaxLogSize(value);
         RaisePropertyChanged(L"LogReductionMaxSize");
-        OutputDebugString(L"LogReductionMaxSize byl změněn\n");
     }
 
     FLOAT StorjData::LogReducedSize()
@@ -141,7 +138,6 @@ namespace winrt::Storj_Tools::implementation
 		if (dataAdapter.GetLogReducedSize() == value) return;
 		dataAdapter.SetLogReducedSize(value);
 		RaisePropertyChanged(L"LogReducedSize");
-		OutputDebugString(L"LogReducedSize byl změněn\n");
     }
 
     hstring StorjData::BotToken()
@@ -154,7 +150,6 @@ namespace winrt::Storj_Tools::implementation
 		if (StringToHstring(dataAdapter.GetDiscordBotToken()) == value) return;
 		dataAdapter.SetDiscordBotToken(HstringToString(value)); 
 		RaisePropertyChanged(L"BotToken");
-		OutputDebugString(L"BotToken byl změněn\n");
     }
 
     hstring StorjData::UserID()
@@ -167,109 +162,91 @@ namespace winrt::Storj_Tools::implementation
 		if (StringToHstring(dataAdapter.GetDiscordUserID()) == value) return;
         dataAdapter.SetDiscordUserID(HstringToString(value));
         RaisePropertyChanged(L"UserID");
-        OutputDebugString(L"UserID byl změněn\n");
     }
 
     void StorjData::SendTestMessageToDiscord()
     {
 		dataAdapter.SendTestMessageToDiscord();
-		OutputDebugString(L"SendTestMessageToDiscord byl vyžádán\n");
     }
 
     void StorjData::RaisePropertyChanged(hstring const& propertyName)
     {
-        propertyChanged(*this, winrt::Microsoft::UI::Xaml::Data::PropertyChangedEventArgs(propertyName));
+        propertyChanged(*this, PropertyChangedEventArgs(propertyName));
     }
 
-    std::vector<Storj_Tools::Node> StorjData::GetNodes()
+    vector<Storj_Tools::Node> StorjData::GetNodes()
     {
-		// Dočasně naplněno dummy daty
-		std::vector<Storj_Tools::Node> nodes;
-
-        // Inicializace generátoru náhodných čísel
-        std::random_device rd; // Pro získání náhodného seedu
-        std::mt19937 gen(rd()); // Mersenne Twister engine, dobrý default
-        std::uniform_int_distribution<> distrib(0, 1); // Rozdělení pro 0 nebo 1
-
-        for (int i = 0; i < 5; i++)
-        {
-            Storj_Tools::Node node;
-			node.Name(L"Node " + std::to_wstring(i));
-			node.Path(L"C:\\Program Files\\Storj\\Node " + std::to_wstring(i));
-            node.SVersion(L"1.0.0");
-			// Náhodně nastavíme stav služby
-            int randomNumber = distrib(gen); // Generování 0 nebo 1 náhodně
-            node.DStatus((randomNumber == 0) ? SERVICE_RUNNING : SERVICE_STOPPED); // Pokud 0, SERVICE_RUNNING, jinak SERVICE_STOPPED
-            nodes.push_back(node);
-        }
+		vector<Storj_Tools::Node> nodes;
+		vector<wstring> nodesNames = dataAdapter.GetNodesNames();
+		for (const auto& nodeName : nodesNames)
+		{
+			Storj_Tools::Node node;
+			node.Name(WstringToHstring(nodeName));
+			node.Path(WstringToHstring(dataAdapter.GetNodePath(nodeName)));
+			node.SVersion(WstringToHstring(dataAdapter.GetNodeVersion(nodeName)));
+			node.DStatus(dataAdapter.GetNodeStatus(nodeName));
+			nodes.push_back(node);
+		}
         return nodes;
     }
 
-    void StorjData::SortNodesByName(std::vector<Storj_Tools::Node>& nodes)
+    void StorjData::SortNodesByName(vector<Storj_Tools::Node>& nodes)
     {
-        std::sort(nodes.begin(), nodes.end());
+        sort(nodes.begin(), nodes.end());
     }
 
-    bool StorjData::isVectorsNodesEquals(const std::vector<Storj_Tools::Node>& nodes1, const winrt::Windows::Foundation::Collections::IObservableVector<Storj_Tools::Node> nodes2)
+    bool StorjData::isVectorsNodesEquals(const vector<Storj_Tools::Node>& nodes1, const IObservableVector<Storj_Tools::Node> nodes2)
     {
 		if (nodes1.size() != nodes2.Size()) return false;
         return std::equal(nodes1.begin(), nodes1.end(), nodes2.begin());
     }
 
-    hstring StorjData::WstringToHstring(const std::wstring& wstring)
+    hstring StorjData::WstringToHstring(const wstring& wstring)
     {
-        return winrt::hstring(wstring.c_str());
+        return hstring(wstring.c_str());
     }
 
-    std::wstring StorjData::HstringToWstring(const hstring& hstring)
+    wstring StorjData::HstringToWstring(const hstring& hstring)
     {
-        return std::wstring(hstring.c_str());
+        return wstring(hstring.c_str());
     }
 
-    std::string StorjData::WstringToString(const std::wstring& wstring)
+    string StorjData::WstringToString(const wstring& wstring)
     {
         if (wstring.empty()) return "";
         int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstring.c_str(), -1, nullptr, 0, nullptr, nullptr);
         if (size_needed <= 0) return "";
-        std::string str(size_needed - 1, 0);
+        string str(size_needed - 1, 0);
         WideCharToMultiByte(CP_UTF8, 0, wstring.c_str(), -1, &str[0], size_needed, nullptr, nullptr);
         return str;
     }
 
-    std::wstring StorjData::StringToWstring(const std::string& string)
+    wstring StorjData::StringToWstring(const string& string)
     {
         if (string.empty()) return L"";
         int size_needed = MultiByteToWideChar(CP_UTF8, 0, string.c_str(), -1, nullptr, 0);
         if (size_needed <= 0) return L"";
-        std::wstring wstr(size_needed - 1, 0);
+        wstring wstr(size_needed - 1, 0);
         MultiByteToWideChar(CP_UTF8, 0, string.c_str(), -1, &wstr[0], size_needed);
         return wstr;
     }
 
-    std::string StorjData::HstringToString(const winrt::hstring& hstring)
+    string StorjData::HstringToString(const hstring& hstring)
     {
 		return WstringToString(HstringToWstring(hstring));
     }
 
-    hstring StorjData::StringToHstring(const std::string& string)
+    hstring StorjData::StringToHstring(const string& string)
     {
 		return WstringToHstring(StringToWstring(string));
     }
 
     void StorjData::InitTheme()
     {
-        auto settings = winrt::Windows::Storage::ApplicationData::Current().LocalSettings();
+        auto settings = ApplicationData::Current().LocalSettings();
         auto value = settings.Values().TryLookup(L"AppThemeIsLight");
-
-        if (value)
-        {
-            isLightingMode = winrt::unbox_value<bool>(value);
-        }
-        else
-        {
-            isLightingMode = true;
-        }
-        CurrentTheme(isLightingMode ? Microsoft::UI::Xaml::ElementTheme::Light : Microsoft::UI::Xaml::ElementTheme::Dark);
+        isLightingMode = value ? unbox_value<bool>(value) : true;
+        CurrentTheme(isLightingMode ? ElementTheme::Light : ElementTheme::Dark);
     }
 
     bool StorjData::IsLightMode()
@@ -281,46 +258,31 @@ namespace winrt::Storj_Tools::implementation
     {
 		if (isLightingMode == value) return;
 		isLightingMode = value;
-        // Uložení do ApplicationData pro budoucí použití
-        auto settings = winrt::Windows::Storage::ApplicationData::Current().LocalSettings();
-        settings.Values().Insert(L"AppThemeIsLight", winrt::box_value(value));
+        auto settings = ApplicationData::Current().LocalSettings();
+        settings.Values().Insert(L"AppThemeIsLight", box_value(value));
 		RaisePropertyChanged(L"IsLightMode");
-		CurrentTheme(value ? Microsoft::UI::Xaml::ElementTheme::Light : Microsoft::UI::Xaml::ElementTheme::Dark);
+		CurrentTheme(value ? ElementTheme::Light : ElementTheme::Dark);
     }
 
-    Microsoft::UI::Xaml::ElementTheme StorjData::CurrentTheme()
+    ElementTheme StorjData::CurrentTheme()
     {
 		return currentTheme;
     }
 
-    void StorjData::CurrentTheme(Microsoft::UI::Xaml::ElementTheme value)
+    void StorjData::CurrentTheme(ElementTheme value)
     {
 		if (currentTheme == value) return;
 		currentTheme = value;
 		RaisePropertyChanged(L"CurrentTheme");
-		SetTitleBar();
     }
-
 
     FLOAT StorjData::UpdateNodeUIInterval()
     {
-
-		if (updateNodeUIInterval != 0) // Kontrola, zda je `updateNodeUIInterval` neinicializované
-		{
-			return updateNodeUIInterval;
-		}
-
-		auto settings = winrt::Windows::Storage::ApplicationData::Current().LocalSettings();
+		if (updateNodeUIInterval != 0) return updateNodeUIInterval;
+		auto settings = ApplicationData::Current().LocalSettings();
 		auto value = settings.Values().TryLookup(L"UpdateNodeUIInterval");
-        if (value)
-        {
-			updateNodeUIInterval = winrt::unbox_value<FLOAT>(value);
-        }
-        else
-        {
-	    	updateNodeUIInterval = 30;
-        }
-		RaisePropertyChanged(L"UpdateNodeUIInterval");
+		updateNodeUIInterval = value ? unbox_value<FLOAT>(value) : 30;
+    	RaisePropertyChanged(L"UpdateNodeUIInterval");
 		return updateNodeUIInterval;
     }
 
@@ -329,13 +291,7 @@ namespace winrt::Storj_Tools::implementation
 		if (updateNodeUIInterval == value) return;
 		updateNodeUIInterval = value;
 		RaisePropertyChanged(L"UpdateNodeUIInterval");
-		auto settings = winrt::Windows::Storage::ApplicationData::Current().LocalSettings();
-		settings.Values().Insert(L"UpdateNodeUIInterval", winrt::box_value(value));
-    }
-
-    void StorjData::SetTitleBar()
-    {
-        //nastavý barvy tilebaru
-
+		auto settings = ApplicationData::Current().LocalSettings();
+		settings.Values().Insert(L"UpdateNodeUIInterval", box_value(value));
     }
 }

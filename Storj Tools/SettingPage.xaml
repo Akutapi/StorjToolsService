@@ -6,15 +6,20 @@
     xmlns:local="using:Storj_Tools"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    HorizontalAlignment="Left"
+    VerticalAlignment="Top"
+    Margin="30,30,30,30"
     RequestedTheme="{ x:Bind Data.CurrentTheme, Mode=OneWay }" 
     mc:Ignorable="d">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="20">
-         <!-- Interval obnovy -->
-        <TextBlock Text="Service Node Refresh Interval (seconds):" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"/>
-            <NumberBox x:Name="refreshIntervalNumberBox" HorizontalAlignment="Stretch" Minimum="5" Maximum="600" Value="{x:Bind Data.UpdateNodeUIInterval , Mode = TwoWay}" /> 
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <!-- Nadpis -->
+        <TextBlock Text="Settings" FontSize="24" FontWeight="Bold" HorizontalAlignment="Left" Margin="0,0,0,0"/>
+
+        <!-- Interval obnovy -->
+        <TextBlock Text="Service Node Refresh Interval (seconds):" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+        <NumberBox x:Name="refreshIntervalNumberBox"  Width="64" HorizontalAlignment="Left" Minimum="5" Maximum="600" Value="{x:Bind Data.UpdateNodeUIInterval , Mode = TwoWay}" Margin="0,5,0,0"/> 
         <!-- Téma -->
-        <TextBlock Text="Select Theme:" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10"/>
-            <ToggleSwitch x:Name="themeToggleSwitch" Header="Light/Dark Theme" IsOn="{x:Bind Data.IsLightMode, Mode=TwoWay}" OnContent="Light" OffContent="Dark"/>
+        <ToggleSwitch x:Name="themeToggleSwitch" Header="Light/Dark Theme" IsOn="{x:Bind Data.IsLightMode, Mode=TwoWay}" OnContent="Light" OffContent="Dark" Margin="0,30,0,0"/>
     </StackPanel>
 </Page>

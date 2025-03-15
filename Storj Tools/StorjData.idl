@@ -9,6 +9,7 @@ namespace Storj_Tools
 
         // Main page
         String ServiceStatus{ get; };
+		Microsoft.UI.Xaml.Media.SolidColorBrush ServiceStatusColor{ get; };
 		void RestartService();
 
 		// Setting from YAML file

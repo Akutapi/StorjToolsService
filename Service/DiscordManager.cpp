@@ -106,7 +106,7 @@ bool DiscordManager::SetDiscordBot(std::string _token, std::string _userID)
 		if (dmResponse.contains("id"))
 		{
 			dmChannelId = dmResponse["id"].get<std::string>();
-			logger.LogInfo(L"DM kanál s uživatelem " + StringToWString(userID) + L" byl úspìšnì vytvoøen. ID kanálu: " + StringToWString(dmChannelId));
+			//logger.LogInfo(L"DM kanál s uživatelem " + StringToWString(userID) + L" byl úspìšnì vytvoøen. ID kanálu: " + StringToWString(dmChannelId));
 		}
 		else
 		{
@@ -123,7 +123,7 @@ bool DiscordManager::SetDiscordBot(std::string _token, std::string _userID)
 	// Uvolnìní hlavièek
 	curl_slist_free_all(headers);
 	headers = nullptr;
-	logger.LogInfo(L"Discord bot byl úspìšnì nastaven.");
+	//logger.LogInfo(L"Discord bot byl úspìšnì nastaven.");
 	return true;
 }
 
@@ -182,7 +182,7 @@ bool DiscordManager::sendMsg(const std::string& message)
 			return false;
 		}
 
-		logger.LogInfo(L"Zpráva úspìšnì odeslána.");
+		//logger.LogInfo(L"Zpráva úspìšnì odeslána.");
 
 		// Uvolnìní hlavièek
 		curl_slist_free_all(headers);
