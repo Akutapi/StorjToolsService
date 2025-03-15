@@ -18,6 +18,7 @@
 
 Tools::Tools(Logger& _logger) : logger(_logger), logReducer(_logger), scManager(_logger), config(_logger), serviceUpdater(_logger), discordManager(_logger)
 {
+	SetDiscordManager();
 	discordManager.sendDM(L"The Storj service has started.");
 }
 
